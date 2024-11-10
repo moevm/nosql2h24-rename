@@ -10,6 +10,7 @@ import {
 } from "@taiga-ui/legacy";
 import {ToponymTableComponent} from "./toponym-table/toponym-table.component";
 import {ToponymFiltersComponent} from "./toponym-filters/toponym-filters.component";
+import {ToponymsService} from "../../services/toponyms.service";
 
 @Component({
   selector: 'app-main-page',
@@ -27,7 +28,11 @@ import {ToponymFiltersComponent} from "./toponym-filters/toponym-filters.compone
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.sass'
 })
-export class MainPageComponent implements OnInit{
+export class MainPageComponent implements OnInit {
+
+  constructor(private readonly toponymsService: ToponymsService) {
+  }
+
   data: ToponymDto[] = [
     {
       name: 'Собор Святого Исаакия',
@@ -74,7 +79,6 @@ export class MainPageComponent implements OnInit{
 
   onFilter(filterDto: FilterDto) {
     filterDto.page = this.currentPage;
-
-    console.log(filterDto);
+    this.toponymsService.getToponyms(filterDto);
   }
 }
