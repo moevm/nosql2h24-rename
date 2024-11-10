@@ -4,7 +4,7 @@
   </div>
   <div class="col-10">
     <app-toponym-table
-      [data]="data"
+      [data]="filteredData"
       [columns]="columns"
       [pageSize]="pageSize"
       (pageChanged)="onPageChanged($event)">

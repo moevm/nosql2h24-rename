@@ -33,36 +33,6 @@ export class MainPageComponent implements OnInit {
   constructor(private readonly toponymsService: ToponymsService) {
   }
 
-  data: ToponymDto[] = [
-    {
-      name: 'Собор Святого Исаакия',
-      renameYears: [new Date('1922-01-01'), new Date('1950-05-01')],
-      address: 'Исаакиевская площадь, Санкт-Петербург, Россия',
-      photoUrl: 'https://placehold.co/600x400/EEE/31343C',
-      type: 'Собор',
-      style: 'Неоклассицизм',
-      architect: 'Огюст Монферран',
-    },
-    {
-      name: 'Эрмитаж',
-      renameYears: [new Date('1917-01-01')],
-      address: 'Дворцовая площадь, Санкт-Петербург, Россия',
-      photoUrl: 'https://placehold.co/600x400/EEE/31343C',
-      type: 'Музей',
-      style: 'Барокко',
-      architect: 'Бартоломео Растрелли',
-    },
-    {
-      name: 'Петропавловская крепость',
-      renameYears: [new Date('1703-05-16')],
-      address: 'Заячий остров, Санкт-Петербург, Россия',
-      photoUrl: 'https://placehold.co/600x400/EEE/31343C',
-      type: 'Крепость',
-      style: 'Петровское барокко',
-      architect: 'Доменико Трезини',
-    },
-  ];
-
   filteredData: ToponymDto[] = [];
   pageSize = 10;
   currentPage = 1;
@@ -70,7 +40,7 @@ export class MainPageComponent implements OnInit {
   columns = ['Название', 'Годы', 'Адрес', 'Фото', 'Тип', 'Стиль', 'Архитектор'];
 
   ngOnInit() {
-    this.filteredData = this.data;
+    this.onFilter({});
   }
 
   onPageChanged(page: number) {
@@ -79,6 +49,9 @@ export class MainPageComponent implements OnInit {
 
   onFilter(filterDto: FilterDto) {
     filterDto.page = this.currentPage;
-    this.toponymsService.getToponyms(filterDto);
+    this.toponymsService.getToponyms(filterDto).subscribe((result: ToponymDto[]) => {
+      this.filteredData = result;
+      console.log(this.filteredData);
+    });
   }
 }
