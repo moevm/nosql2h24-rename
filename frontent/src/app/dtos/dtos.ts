@@ -19,4 +19,5 @@ export interface FilterDto {
   cardSearch?: string | null;
   constructionDateFrom?: number | null;
   constructionDateTo?: number | null;
+  page?: number | null;
 }

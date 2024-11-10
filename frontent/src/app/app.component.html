@@ -1,11 +1,10 @@
 <tui-root tuiTheme="dark">
-
   <div class="container-fluid">
     <tui-tabs [(activeItemIndex)]="activeTab">
       <button tuiTab>Таблица</button>
       <button tuiTab>Карта</button>
       <button tuiTab>О проекте</button>
     </tui-tabs>
-    <app-main-page></app-main-page>
+    <router-outlet></router-outlet>
   </div>
 </tui-root>
