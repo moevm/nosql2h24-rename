@@ -9,3 +9,14 @@ export interface ToponymDto {
   style: string;
   architect: string;
 }
+
+export interface FilterDto {
+  type?: string[] | null;
+  style?: string[] | null;
+  hasPhoto?: boolean | null;
+  architect?: string | null;
+  renamedTo?: string | null;
+  cardSearch?: string | null;
+  constructionDateFrom?: number | null;
+  constructionDateTo?: number | null;
+}

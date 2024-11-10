@@ -1,86 +1,11 @@
-<tui-root>
-<!--<router-outlet />-->
-  <div class="container">
+<tui-root tuiTheme="dark">
 
-
-    <table
-      tuiTable
-      class="table"
-      [columns]="columns"
-    >
-      <thead>
-      <tr tuiThGroup>
-        <th tuiTh>Name</th>
-        <th tuiTh>Rename Years</th>
-        <th tuiTh>Address</th>
-        <th tuiTh>Photo</th>
-        <th tuiTh>Type</th>
-        <th tuiTh>Style</th>
-        <th tuiTh>Architect</th>
-      </tr>
-      </thead>
-      <tbody
-        tuiTbody
-        [data]="paginatedData"
-      >
-      <tr
-        *ngFor="let item of paginatedData"
-        tuiTr
-      >
-        <td
-          *tuiCell="'name'"
-          tuiTd
-        >
-          {{ item.name }}
-        </td>
-        <td
-          *tuiCell="'renameYears'"
-          tuiTd
-        >
-          {{ getRenameYears(item.renameYears) }}
-        </td>
-        <td
-          *tuiCell="'address'"
-          tuiTd
-        >
-          {{ item.address }}
-        </td>
-        <td
-          *tuiCell="'photoUrl'"
-          tuiTd
-        >
-          <img [src]="item.photoUrl" alt="Photo" width="100">
-        </td>
-        <td
-          *tuiCell="'type'"
-          tuiTd
-        >
-          {{ item.type }}
-        </td>
-        <td
-          *tuiCell="'style'"
-          tuiTd
-        >
-          {{ item.style }}
-        </td>
-        <td
-          *tuiCell="'architect'"
-          tuiTd
-        >
-          {{ item.architect }}
-        </td>
-      </tr>
-      </tbody>
-    </table>
-
-    <tui-pagination
-      [length]="totalPages"
-      [(index)]="currentPage"
-      [size]="'l'"
-      (indexChange)="onPageChange($event)">
-    </tui-pagination>
-
+  <div class="container-fluid">
+    <tui-tabs [(activeItemIndex)]="activeTab">
+      <button tuiTab>Таблица</button>
+      <button tuiTab>Карта</button>
+      <button tuiTab>О проекте</button>
+    </tui-tabs>
+    <app-main-page></app-main-page>
   </div>
-
-
 </tui-root>
