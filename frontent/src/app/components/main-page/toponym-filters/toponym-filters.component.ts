@@ -77,8 +77,8 @@ export class ToponymFiltersComponent implements OnInit {
   onFilter() {
     const filters = this.filtersForm.value;
     const filterDto: FilterDto = {
-      type: filters.type,
-      style: filters.style,
+      type: (filters.type && filters.type?.length > 0) ? filters.type : null,
+      style: (filters.style && filters.style?.length > 0) ? filters.style : null,
       hasPhoto: filters.hasPhoto,
       architect: filters.architect,
       renamedTo: filters.renamedTo,

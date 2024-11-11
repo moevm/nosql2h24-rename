@@ -49,6 +49,7 @@ export class MainPageComponent implements OnInit {
 
   onFilter(filterDto: FilterDto) {
     filterDto.page = this.currentPage;
+    console.log(filterDto);
     this.toponymsService.getToponyms(filterDto).subscribe((result: ToponymDto[]) => {
       this.filteredData = result;
       console.log(this.filteredData);
