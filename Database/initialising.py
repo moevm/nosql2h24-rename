@@ -23,14 +23,16 @@ def load_data_into_neo4j(json_file):
                 MERGE (t:Toponym {
                     _id: $_id,
                     Address: $address,
-                    ConstructionDate: $constructionDate,
+                    ConstructionDateTo: $constructionDateTo,
+                    ConstructionDateFrom: $constructionDateFrom,
                     BriefDescription: $briefDescription,
                     Point: point({latitude: $latitude, longitude: $longitude, crs: $crs})
                 })
                 """,
                 _id=toponym["_id"],
                 address=toponym["Address"],
-                constructionDate=toponym["ConstructionDate"],
+                constructionDateFrom=toponym["ConstructionDateFrom"],
+                constructionDateTo=toponym["ConstructionDateTo"],
                 briefDescription=toponym["BriefDescription"],
                 latitude=toponym["Point"]["latitude"],
                 longitude=toponym["Point"]["longitude"],
@@ -43,7 +45,7 @@ def load_data_into_neo4j(json_file):
                     """
                     MATCH (t:Toponym {_id: $_id})
                     MERGE (s:Style {Name: $styleName})
-                    MERGE (t)-[:HAVE_TYPE]->(s)
+                    MERGE (t)-[:STYLED]->(s)
                     """,
                     _id=toponym["_id"],
                     styleName=style
@@ -101,5 +103,3 @@ def load_data_into_neo4j(json_file):
 # Запуск загрузки данных
 load_data_into_neo4j('toponyms_data.json')
 
-# Закрытие драйвера
-driver.close()
