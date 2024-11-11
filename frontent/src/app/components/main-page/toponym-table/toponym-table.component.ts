@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {FilterDto, ToponymDto} from "../../../dtos/dtos";
+import {ToponymDto} from "../../../dtos/dtos";
 import {NgForOf} from "@angular/common";
 import {TuiPagination} from "@taiga-ui/kit";
 import {
@@ -32,7 +32,7 @@ export class ToponymTableComponent {
 
   @Input() data: ToponymDto[] = [];
   @Input() columns: string[] = [];
-  @Input() pageSize = 10;
+  @Input() pageSize = 5;
 
   currentPage = 0;
 
@@ -48,9 +48,5 @@ export class ToponymTableComponent {
   onPageChange(page: number) {
     this.currentPage = page;
     this.pageChanged.emit(page);
-  }
-
-  getRenameYears(renameYears: Date[]) {
-    return renameYears.map((date) => date.toISOString().split('T')[0]).join(':');
   }
 }

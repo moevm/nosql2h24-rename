@@ -2,7 +2,7 @@
 
 export interface ToponymDto {
   name: string;
-  renameYears: Date[];
+  renameYears: number[];
   address: string;
   photoUrl: string;
   type: string;

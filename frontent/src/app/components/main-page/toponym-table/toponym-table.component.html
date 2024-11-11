@@ -13,7 +13,7 @@
   <tbody tuiTbody [data]="paginatedData">
   <tr *ngFor="let item of paginatedData" tuiTr>
     <td *tuiCell="columns[0]" tuiTd>{{ item.name }}</td>
-    <td *tuiCell="columns[1]" tuiTd>{{ getRenameYears(item.renameYears) }}</td>
+    <td *tuiCell="columns[1]" tuiTd>{{ item.renameYears }}</td>
     <td *tuiCell="columns[2]" tuiTd>{{ item.address }}</td>
     <td *tuiCell="columns[3]" tuiTd>
       <img [src]="item.photoUrl" alt="Photo" width="100" />
