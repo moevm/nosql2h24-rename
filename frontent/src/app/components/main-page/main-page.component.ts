@@ -34,7 +34,7 @@ export class MainPageComponent implements OnInit {
   }
 
   filteredData: ToponymDto[] = [];
-  pageSize = 10;
+  pageSize = 5;
   currentPage = 1;
 
   columns = ['Название', 'Годы', 'Адрес', 'Фото', 'Тип', 'Стиль', 'Архитектор'];

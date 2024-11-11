@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {TUI_DEFAULT_MATCHER, tuiPure} from "@taiga-ui/cdk";
 import {FilterDto} from "../../../dtos/dtos";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
@@ -41,7 +41,7 @@ const STYLES: readonly string[] = [
   templateUrl: './toponym-filters.component.html',
   styleUrl: './toponym-filters.component.sass'
 })
-export class ToponymFiltersComponent {
+export class ToponymFiltersComponent implements OnInit {
   @Output() filtersChanged = new EventEmitter<FilterDto>();
 
   filtersForm = new FormGroup({
