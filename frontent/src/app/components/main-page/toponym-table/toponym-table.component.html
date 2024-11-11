@@ -16,7 +16,7 @@
     <td *tuiCell="columns[1]" tuiTd>{{ item.renameYears }}</td>
     <td *tuiCell="columns[2]" tuiTd>{{ item.address }}</td>
     <td *tuiCell="columns[3]" tuiTd>
-      <img [src]="item.photoUrl" alt="Photo" width="100" />
+      <img [src]="item.photoUrl | safeUrl" alt="Photo" width="100" />
     </td>
     <td *tuiCell="columns[4]" tuiTd>{{ item.type }}</td>
     <td *tuiCell="columns[5]" tuiTd>{{ item.style }}</td>

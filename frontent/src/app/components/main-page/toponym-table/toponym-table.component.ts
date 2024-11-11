@@ -10,6 +10,7 @@ import {
   TuiTableTh,
   TuiTableThGroup, TuiTableTr
 } from "@taiga-ui/addon-table";
+import {SafeUrlPipe} from "../../../pipes/safe-url.pipe";
 
 @Component({
   selector: 'app-toponym-table',
@@ -24,7 +25,8 @@ import {
     TuiTableTd,
     TuiTableTh,
     TuiTableThGroup,
-    TuiTableTr
+    TuiTableTr,
+    SafeUrlPipe
   ],
 })
 export class ToponymTableComponent {
