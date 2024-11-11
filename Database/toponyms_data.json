@@ -1,0 +1,346 @@
+{
+    "toponyms": [
+        {
+            "_id": 0,
+            "Address": "Лейтенанта Шмидта наб., 45;21-я линия ВО, 2-6;22-я линия ВО, 1",
+            "ConstructionDateFrom": 1806,
+            "ConstructionDateTo": 1811,
+            "BriefDescription": "Санкт-Петербургский горный университет — первое в России высшее техническое учебное заведение, основанное Указом императрицы Екатерины II 21 октября 1773 года.",
+            "Point": {
+                "latitude": 59.93015,
+                "longitude": 30.270468,
+                "crs": "WGS-84"
+            },
+            "style": ["Классицизм"],
+            "types": ["Здание"],
+            "architects": [
+                "Воронихин Андрей Никифорович"
+            ],
+            "photos": [
+                "https://p1.citywalls.ru/photo_1-1457.jpg?mt=1273625807",
+                "https://p2.citywalls.ru/photo_1-1458.jpg?mt=1273625807",
+                "https://p3.citywalls.ru/photo_44-45235.jpg?mt=1276374749"
+            ],
+            "nameRecords": [
+                {
+                    "Name": "Горное училище",
+                    "EffectiveDateFrom": 1773
+                },
+                {
+                    "Name": "Горный кадетский корпус",
+                    "EffectiveDateFrom": 1804
+                },
+                {
+                    "Name": "Горный институт",
+                    "EffectiveDateFrom": 1866
+                },
+                {
+                    "Name": "Горный институт Императрицы Екатерины II",
+                    "EffectiveDateFrom": 1896
+                },
+                {
+                    "Name": "Ленинградский горный институт",
+                    "EffectiveDateFrom": 1924
+                },
+                {
+                    "Name": "Ленинградский горный институт имени Г. В. Плеханова",
+                    "EffectiveDateFrom": 1956
+                },
+                {
+                    "Name": "Санкт-Петербургский горный университет",
+                    "EffectiveDateFrom": 2016
+                },
+                {
+                    "Name": "Санкт-Петербургский горный университет императрицы Екатерины II",
+                    "EffectiveDateFrom": 2023
+                }
+            ]
+        },
+        {
+            "_id": 1,
+            "Address": "Фонтанки наб., 44",
+            "ConstructionDateFrom": 1856,
+            "ConstructionDateTo": 1857,
+            "BriefDescription": "Основана в 1868 году как частная библиотека при книжном магазине издателя А. А. Черкесова, позднее переименовывалась и расширялась.",
+            "Point": {
+                "latitude": 59.951291,
+                "longitude": 30.409223,
+                "crs": "WGS-84"
+            },
+            "style": ["Неорусский"],
+            "types": ["Здание"],
+            "architects": [
+                "Горностаев Алексей Максимович"
+            ],
+            "photos": [
+                "https://p0.citywalls.ru/photo_0-160.jpg?mt=1273625807",
+                "https://p3.citywalls.ru/photo_451-461995.jpg?mt=1599692950",
+                "https://p1.citywalls.ru/photo_290-297813.jpg?mt=1505069275"
+            ],
+            "nameRecords": [
+                {
+                    "Name": "Библиотека Черкесова",
+                    "EffectiveDateFrom": 1868
+                },
+                {
+                    "Name": "Центральная коммунальная библиотека Петрограда",
+                    "EffectiveDateFrom": 1919
+                },
+                {
+                    "Name": "Центральная библиотека Ленинградского Политпросвета",
+                    "EffectiveDateFrom": 1928
+                },
+                {
+                    "Name": "Центральная городская библиотека им. В. В. Маяковского",
+                    "EffectiveDateFrom": 1954
+                }
+            ]
+        },
+        {
+            "_id": 2,
+            "Address": "Лейтенанта Шмидта наб., 17;12-я линия ВО, 1;11-я линия ВО, 2",
+            "ConstructionDateFrom": 1796,
+            "ConstructionDateTo": 1799,
+            "BriefDescription": "Морской корпус Петра Великого — Санкт-Петербургский военно-морской институт — старейшее военно-морское учебное заведение России, основанное в 1701 году Петром I как Школа математических и навигацких наук. Расположен в Санкт-Петербурге по адресу: набережная Лейтенанта Шмидта, дом 17. Институт готовит офицеров для Военно-морского флота России, предлагая обучение на пяти факультетах, включая штурманский, гидрографический и факультеты, связанные с различными видами вооружения.",
+            "Point": {
+                "latitude": 59.936695,
+                "longitude": 30.278880,
+                "crs": "WGS-84"
+            },
+            "style": ["Классицизм"],
+            "types": ["Здание"],
+            "architects": [
+                "Волков Фёдор Иванович"
+            ],
+            "photos": [
+                "https://p2.citywalls.ru/photo_1-1438.jpg?mt=1273625807",
+                "https://p2.citywalls.ru/photo_1-1442.jpg?mt=1273625807",
+                "https://p2.citywalls.ru/photo_1-1442.jpg?mt=1273625807"
+            ],
+            "nameRecords": [
+                {
+                    "Name": "Школа математических и навигацких наук",
+                    "EffectiveDateFrom": 1701
+                },
+                {
+                    "Name": "Морская академия",
+                    "EffectiveDateFrom": 1715
+                },
+                {
+                    "Name": "Морской кадетский корпус",
+                    "EffectiveDateFrom": 1762
+                },
+                {
+                    "Name": "Морское училище",
+                    "EffectiveDateFrom": 1867
+                },
+                {
+                    "Name": "Военно-морское училище имени М. В. Фрунзе",
+                    "EffectiveDateFrom": 1926
+                },
+                {
+                    "Name": "Морской корпус Петра Великого — Санкт-Петербургский военно-морской институт",
+                    "EffectiveDateFrom": 2001
+                }
+            ]
+        },
+        {
+            "_id": 3,
+            "Address": "10-я линия ВО, 3",
+            "ConstructionDateFrom": 1824,
+            "ConstructionDateTo": 1825,
+            "BriefDescription": "Учреждён в 1813 году как Сиротское училище для дочерей офицеров, погибших в Отечественной войне 1812 года.",
+            "Point": {
+                "latitude": 59.938386,
+                "longitude": 30.280267,
+                "crs": "WGS-84"
+            },
+            "style": ["Классицизм"],
+            "types": ["Здание"],
+            "architects": [
+                "Китнер Иероним Севастьянович",
+                "Берзен Ричард Андреевич"
+            ],
+            "photos": [
+                "https://p2.citywalls.ru/photo_1-1290.jpg?mt=1273625807",
+                "https://p3.citywalls.ru/photo_377-386071.jpg?mt=1551736368",
+                "https://p3.citywalls.ru/photo_376-385727.jpg?mt=1551651004"
+            ],
+            "nameRecords": [
+                {
+                    "Name": "Сиротское училище для дочерей офицеров, погибших в Отечественной войне 1812 года",
+                    "EffectiveDateFrom": 1813
+                },
+                {
+                    "Name": "Патриотический институт",
+                    "EffectiveDateFrom": 1827
+                }
+            ]
+        },
+        {
+            "_id": 4,
+            "Address": "Большевиков пр., 16;Дыбенко ул., 28;Товарищеский пр., 13",
+            "ConstructionDateFrom": 1980,
+            "ConstructionDateTo": 1985,
+            "BriefDescription": "Парк в Невском районе Санкт-Петербурга, ограничен проспектом Большевиков, улицей Дыбенко, улицей Подвойского и Товарищеским проспектом, входит в состав муниципального округа Оккервиль.",
+            "Point": {
+                "latitude": 59.910437,
+                "longitude": 30.484716,
+                "crs": "WGS-84"
+            },
+            "style" : [],
+            "types": ["Парк"],
+            "architects": [],
+            "photos": [
+                "https://p3.citywalls.ru/photo_367-375883.jpg?mt=1545604792"
+            ],
+            "nameRecords": [
+                {
+                    "Name": "Парк Большевиков",
+                    "EffectiveDateFrom": 1980
+                },
+                {
+                    "Name": "Парк имени Есенина",
+                    "EffectiveDateFrom": 2012
+                }
+            ]
+        },
+        {
+            "_id": 5,
+            "Address": "Достоевского ул., 40-44",
+            "ConstructionDateFrom": 1888,
+            "ConstructionDateTo": 1893,
+            "BriefDescription": "Механический завод саксонского инженера Курта Зигеля был основан в 1877 году. Основной специализацией завода стало производство оборудования для водо - и газоснабжения.",
+            "Point": {"latitude": 59.923231, "longitude": 30.345745, "crs": "WGS-84"},
+            "style": ["Кирпичный"],
+            "types": ["Здание"],
+            "architects": [
+                "Воронихин Андрей Никифорович"
+            ],
+            "photos": [
+                "https://p1.citywalls.ru/photo_624-639337.jpg?mt=1697659140",
+                "https://p0.citywalls.ru/photo_298-305604.jpg?mt=1509394035"
+            ],
+            "nameRecords": [
+                {"Name": "Монтажный завод № 57", "EffectiveDateFrom": 1918},
+                {"Name": "Петроградский государственный механический завод «Гидравлика»", "EffectiveDateFrom": 1924},
+                {"Name": "Механический завод треста «Техника безопасности» Народного Комиссариата машиностроения СССР", "EffectiveDateFrom": 1938},
+                {"Name": "Ленинградским опытным заводом электронных приборов времени «Хронотрон»", "EffectiveDateFrom": 1975}
+            ]
+        },
+        {
+            "_id": 6,
+            "Address": "Загородный пр., 49",
+            "ConstructionDateFrom" : 1829,
+            "ConstructionDateTo" : 1831,
+            "BriefDescription": "Ведущий российский вуз в области химии, химической технологии, биотехнологии, нанотехнологии, механики, информационных технологий, управления и экономики.",
+            "Point": {"latitude": 59.922234, "longitude": 30.318239, "crs": "WGS-84"}, 
+            "style": ["Классицизм"],
+            "types": ["Здание"],
+            "architects": [
+                "Постников Александр Иванович"
+            ],
+            "photos": [
+                "https://p0.citywalls.ru/photo_96-98716.jpg?mt=1317973634",
+                "https://p1.citywalls.ru/photo_1-1913.jpg?mt=1273625807"
+            ],
+            "nameRecords": [
+                {"Name": "Практический технологический институт", "EffectiveDateFrom": 1831},
+                {"Name": "Санкт-Петербургский технологический институт", "EffectiveDateFrom": 1862},
+                {"Name": "Технологический институт Императора Николая I", "EffectiveDateFrom": 1896},
+                {"Name": "Технологический институт Петроградского Совета рабочих, крестьянских и красноармейских депутатов", "EffectiveDateFrom": 1923},
+                {"Name": "Санкт-Петербургский государственный технологический институт (Технический университет)", "EffectiveDateFrom": 1993}
+            ]
+        },
+        {
+            "_id": 7,
+            "Address": "Университетская наб., 5",
+            "ConstructionDateFrom": 1783,
+            "ConstructionDateTo": 1789,
+            "BriefDescription": "Петербургская академия наук была основана в Санкт-Петербурге по распоряжению императора Петра I указом правительствующего Сената от 28 января (8 февраля) 1724 г.",
+            "Point": {"latitude": 59.943899, "longitude": 30.303904, "crs": "WGS-84"},  
+            "style": ["Неоклассицизм"],
+            "types": ["Здание"],
+            "architects": [
+                "Джакомо Кваренги"
+            ],
+            "photos": [
+                "https://p2.citywalls.ru/photo_1-2030.jpg?mt=1273625807",
+                "https://p2.citywalls.ru/photo_500-512418.jpg?mt=1625057010"
+            ],
+            "nameRecords": [
+                {"Name": "Императорская академия наук", "EffectiveDateFrom": 1789},
+                {"Name": "Императорская Санкт-Петербургская академия наук.", "EffectiveDateFrom": 1836},
+                {"Name": "Российская академия наук", "EffectiveDateFrom": 1917},
+                {"Name": "Академия наук СССР", "EffectiveDateFrom": 1925},
+                {"Name": "Российская академия наук", "EffectiveDateFrom": 1991}
+            ]
+        },
+        {
+            "_id": 8,
+            "Address": "Обводный кан., 1",
+            "ConstructionDateFrom": 1977,
+            "ConstructionDateTo":1979,
+            "BriefDescription": "Ново-Каменный мост — один из старейших мостов Петербурга, его история начинается в 1846-1848 годах. Мост перекинут через Обводный канал в Центральном/Фрунзенском районе Санкт-Петербурга, соединяет Безымянный остров и левый берег Обводного канал.",
+            "Point": {"latitude": 59.915152, "longitude": 30.350776, "crs": "WGS-84"}, 
+            "style": ["Современный"], 
+            "types": ["Мост"],
+            "architects": [
+                "Гутцайт А. Д."
+            ],
+            "photos": [
+                "https://www.citywalls.ru/photo125032.html"
+            ],
+            "nameRecords": [
+                {"Name": "Эстляндский мост", "EffectiveDateFrom": 1914  },
+                {"Name": "мост Стеньки Разина", "EffectiveDateFrom": 1923},
+                {"Name": "мост Степана Разина", "EffectiveDateFrom": 1939}
+            ]
+        },
+        {
+            "_id": 9,
+            "Address": "Ждановка р., 3",
+            "ConstructionDateFrom": 1962 ,
+            "ConstructionDateTo": 1962 ,
+            "BriefDescription": "Мост Красного Курсанта соединяет Петроградский и Петровский острова.",
+            "Point": {"latitude": 59.955234, "longitude": 30.280896, "crs": "WGS-84"}, 
+            "style": [],
+            "types": ["Мост"],
+            "architects": [
+                "Демченко Владимир Владимирович"
+            ],
+            "photos": [
+                "https://www.citywalls.ru/photo75272.html",
+                "https://www.citywalls.ru/photo197901.html"
+            ],
+            "nameRecords": [
+                {"Name": "Старый Петровский мост", "EffectiveDateFrom": 1829},
+                {"Name": "Средний Петровский мост", "EffectiveDateFrom": 1876},
+                {"Name": "Кадетский мост", "EffectiveDateFrom": 1889},
+                {"Name": "мост Красного Курсанта", "EffectiveDateFrom": 1930}
+            ]
+        },
+        {
+            "_id": 10,
+            "Address": "Большой пр. ВО, 49-51",
+            "ConstructionDateFrom": 1897,
+            "ConstructionDateTo": 1899 ,
+            "BriefDescription": "Александровский женский приют — это родильный дом на 80 мест с аптекой и помещениями для проживания служащих приюта, открытый в 1899 году в Санкт-Петербурге по адресу: Большой проспект В.О., 49–51.",
+            "Point": {"latitude": 59.938664, "longitude": 30.273040, "crs": "WGS-84"}, 
+            "style": [],
+            "types": ["Мост"],
+            "architects": [
+                "Шмидт Карл Карлович"
+            ],
+            "photos": [
+                "https://www.citywalls.ru/photo633.html",
+                "https://www.citywalls.ru/photo634.html"
+            ],
+            "nameRecords": [
+                {"Name": "Александровский женский приют", "EffectiveDateFrom": 1899},
+                {"Name": "Родильный дом имени Видемана", "EffectiveDateFrom": 1918 },
+                {"Name": "Многопрофильная клиника имени Н. И. Пирогова", "EffectiveDateFrom": 1999 }
+            ]
+        }
+    ]
+}
