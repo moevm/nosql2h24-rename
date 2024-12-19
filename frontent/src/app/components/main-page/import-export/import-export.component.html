@@ -17,18 +17,18 @@
       Импорт
     </div>
     <input
-      accept=".csv"
-      tuiInputFiles
-      [formControl]="control"
+      accept=".json"
+    tuiInputFiles
+    [formControl]="control"
     />
   </label>
 
   <tui-files class="tui-space_top-1">
     <tui-file
-      *ngIf="control.value | tuiFileRejected: {accept: '.csv'} | async as file"
-      state="error"
-      [file]="file"
-      (remove)="removeFile()"
+      *ngIf="control.value | tuiFileRejected: {accept: '.json'} | async as file"
+    state="error"
+    [file]="file"
+    (remove)="removeFile()"
     ></tui-file>
 
     <tui-file
