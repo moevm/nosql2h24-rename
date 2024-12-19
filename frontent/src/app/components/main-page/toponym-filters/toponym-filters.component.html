@@ -45,13 +45,21 @@
     <input tuiTextfieldLegacy />
   </tui-input>
 
-  <tui-input
-    [formControl]="filtersForm.controls['renamedTo']"
+  <tui-input-year
+    [formControl]="filtersForm.controls['renamedDateFrom']"
     [tuiTextfieldCleaner]="true"
   >
-    Переименован в
+    Переименован в году от
     <input tuiTextfieldLegacy />
-  </tui-input>
+  </tui-input-year>
+
+  <tui-input-year
+    [formControl]="filtersForm.controls['renamedDateTo']"
+    [tuiTextfieldCleaner]="true"
+  >
+    Переименован в году до
+    <input tuiTextfieldLegacy />
+  </tui-input-year>
 
   <tui-input
     [formControl]="filtersForm.controls['cardSearch']"
