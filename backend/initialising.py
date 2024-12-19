@@ -1,19 +1,16 @@
 import json
 from neo4j import GraphDatabase
 
-# Подключение к Neo4j
 uri = "bolt://localhost:7687"
 username = "neo4j"
 password = "12345678"
 driver = GraphDatabase.driver(uri, auth=(username, password))
 
-# Функция для загрузки данных из JSON и добавления в Neo4j
 def load_data_into_neo4j(json_file):
     with open(json_file, 'r', encoding='utf-8') as file:
         data = json.load(file)
 
     with driver.session() as session:
-        # Очистка базы данных
         session.run("MATCH (n) DETACH DELETE n")
 
         for toponym in data["toponyms"]:
@@ -39,7 +36,6 @@ def load_data_into_neo4j(json_file):
                 crs=toponym["Point"]["crs"]
             )
 
-            # Добавление стиля (если не существует)
             for style in toponym["style"]:
                 session.run(
                     """
@@ -51,7 +47,6 @@ def load_data_into_neo4j(json_file):
                     styleName=style
                 )
             
-            # Добавление типа (если не существует)
             for type in toponym["types"]:
                 session.run(
                     """
@@ -62,7 +57,6 @@ def load_data_into_neo4j(json_file):
                     _id=toponym["_id"],
                     typeName=type
                 )
-            # Добавление архитекторов (если не существуют)
             for architect in toponym["architects"]:
                 session.run(
                     """
@@ -74,7 +68,6 @@ def load_data_into_neo4j(json_file):
                     architectName=architect
                 )
 
-            # Добавление фото (если не существуют)
             for photo_url in toponym["photos"]:
                 session.run(
                     """
@@ -86,7 +79,6 @@ def load_data_into_neo4j(json_file):
                     photoUrl=photo_url
                 )
 
-            # Привязка записей о переименованиях
             for name_record in toponym["nameRecords"]:
                 session.run(
                     """
@@ -100,6 +92,5 @@ def load_data_into_neo4j(json_file):
                     dateFrom=name_record["EffectiveDateFrom"]
                 )
 
-# Запуск загрузки данных
 load_data_into_neo4j('toponyms_data.json')
 
