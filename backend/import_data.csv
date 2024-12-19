@@ -1,0 +1,103 @@
+{
+    "toponyms": [
+        {
+            "Address": "Невский проспект, 1",
+            "ConstructionDateFrom": 1703,
+            "ConstructionDateTo": 1706,
+            "BriefDescription": "Историческое здание в Санкт-Петербурге.",
+            "Point": {
+                "latitude": 59.935,
+                "longitude": 30.325,
+                "crs": "WGS-84"
+            },
+            "style": ["Барокко"],
+            "types": ["Здание"],
+            "architects": ["Доменико Трезини"],
+            "photos": [
+                "https://example.com/photo1.jpg",
+                "https://example.com/photo2.jpg"
+            ],
+            "nameRecords": [
+                {
+                    "Name": "Зимний дворец",
+                    "EffectiveDateFrom": 1754
+                },
+                {
+                    "Name": "Государственный Эрмитаж",
+                    "EffectiveDateFrom": 1852
+                }
+            ]
+        },
+        {
+            "Address": "Дворцовая площадь, 2",
+            "ConstructionDateFrom": 1837,
+            "ConstructionDateTo": 1843,
+            "BriefDescription": "Известная площадь с Александровской колонной.",
+            "Point": {
+                "latitude": 59.939,
+                "longitude": 30.314,
+                "crs": "WGS-84"
+            },
+            "style": ["Классицизм"],
+            "types": ["Площадь"],
+            "architects": ["Огюст Монферран"],
+            "photos": [
+                "https://example.com/photo3.jpg"
+            ],
+            "nameRecords": [
+                {
+                    "Name": "Дворцовая площадь",
+                    "EffectiveDateFrom": 1837
+                }
+            ]
+        },
+        {
+ 
+            "Address": "Река Мойка, 12",
+            "ConstructionDateFrom": 1765,
+            "ConstructionDateTo": 1771,
+            "BriefDescription": "Исторический особняк на реке Мойке.",
+            "Point": {
+                "latitude": 59.933,
+                "longitude": 30.301,
+                "crs": "WGS-84"
+            },
+            "style": ["Неоклассицизм"],
+            "types": ["Особняк"],
+            "architects": ["Жан-Батист Валлен-Деламот"],
+            "photos": [
+                "https://example.com/photo4.jpg",
+                "https://example.com/photo5.jpg"
+            ],
+            "nameRecords": [
+                {
+                    "Name": "Дворец Юсуповых",
+                    "EffectiveDateFrom": 1830
+                }
+            ]
+        },
+        {
+            "Address": "Сенатская площадь, 3",
+            "ConstructionDateFrom": 1828,
+            "ConstructionDateTo": 1834,
+            "BriefDescription": "Монументальное здание в Санкт-Петербурге.",
+            "Point": {
+                "latitude": 59.934,
+                "longitude": 30.303,
+                "crs": "WGS-84"
+            },
+            "style": ["Классицизм"],
+            "types": ["Монумент"],
+            "architects": ["Карло Росси"],
+            "photos": [
+                "https://example.com/photo6.jpg"
+            ],
+            "nameRecords": [
+                {
+                    "Name": "Адмиралтейство",
+                    "EffectiveDateFrom": 1828
+                }
+            ]
+        }
+    ]
+}
