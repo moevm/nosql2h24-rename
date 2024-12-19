@@ -3,20 +3,19 @@ from flask import Flask, request, jsonify
 from neo4j import GraphDatabase
 from flask_cors import CORS
 
-# Подключение к Neo4j
 uri = "bolt://localhost:7687"
 username = "neo4j"
 password = "12345678"
 driver = GraphDatabase.driver(uri, auth=(username, password))
 
 app = Flask(__name__)
-CORS(app, support_credintials=True)
-def filter_toponyms(filters):
-    LIMIT = 5  # Константа для количества записей на странице
-    page = filters.get("page", 0)  # Получаем номер страницы из фильтров, по умолчанию 0
-    skip = page * LIMIT  # Вычисляем количество записей, которые нужно пропустить
+CORS(app, support_credentials=True)
 
-    # Преобразуем параметры в списки, если они не являются списками
+def filter_toponyms(filters):
+    LIMIT = 5  
+    page = filters.get("page", 0)   
+    skip = page * LIMIT  
+
     type_param = filters.get("type")
     if type_param and not isinstance(type_param, list):
         type_param = [type_param]
@@ -52,7 +51,8 @@ def filter_toponyms(filters):
       AND ($type IS NULL OR ANY(type_param IN $type WHERE type_param IN types))
       AND ($architect IS NULL OR ANY(architect IN architects WHERE architect CONTAINS $architect))
       AND ($hasPhoto IS NULL OR hasPhotoFlag = $hasPhoto)
-      AND ($renamedTo IS NULL OR ANY(year IN renameYears WHERE year = $renamedTo))
+      AND ($renamedDateFrom IS NULL OR ANY(year IN renameYears WHERE year >= $renamedDateFrom))
+      AND ($renamedDateTo IS NULL OR ANY(year IN renameYears WHERE year <= $renamedDateTo))
       AND ($cardSearch IS NULL OR (
             t.Address CONTAINS $cardSearch OR
             t.BriefDescription CONTAINS $cardSearch
@@ -72,7 +72,8 @@ def filter_toponyms(filters):
         "style": style_param,
         "hasPhoto": filters.get("hasPhoto"),
         "architect": filters.get("architect"),
-        "renamedTo": int(filters.get("renamedTo")) if filters.get("renamedTo") else None,
+        "renamedDateFrom": int(filters.get("renamedDateFrom")) if filters.get("renamedDateFrom") else None,
+        "renamedDateTo": int(filters.get("renamedDateTo")) if filters.get("renamedDateTo") else None,
         "cardSearch": filters.get("cardSearch"),
         "constructionDateFrom": filters.get("constructionDateFrom"),
         "constructionDateTo": filters.get("constructionDateTo"),
@@ -95,9 +96,6 @@ def filter_toponyms(filters):
             })
         return toponyms
 
-
-
-# Endpoint для фильтрации
 @app.route('/api/toponyms', methods=['POST'])
 def get_toponyms():
     filters = request.json  # Получаем JSON-фильтры из запроса
