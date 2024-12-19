@@ -53,6 +53,8 @@ export class ToponymFiltersComponent implements OnInit {
     cardSearch: new FormControl<string | null>(null),
     constructionDateFrom: new FormControl<number | null>(null),
     constructionDateTo: new FormControl<number | null>(null),
+    address: new FormControl<string | null>(null),
+    name: new FormControl<string | null>(null),
   });
 
   searchType: string | null = '';
@@ -86,6 +88,8 @@ export class ToponymFiltersComponent implements OnInit {
       cardSearch: filters.cardSearch,
       constructionDateFrom: filters.constructionDateFrom,
       constructionDateTo: filters.constructionDateTo,
+      address: filters.address,
+      name: filters.name,
     };
     this.filtersChanged.emit(filterDto);
   }
