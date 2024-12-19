@@ -1,5 +1,6 @@
 import json
 import csv
+import uuid
 from flask import Flask, request, jsonify, send_file
 from neo4j import GraphDatabase
 from io import BytesIO, TextIOWrapper
@@ -98,6 +99,7 @@ def filter_toponyms(filters):
                 "architect": record["architects"]
             })
         return toponyms
+    
 
 @app.route('/api/toponyms', methods=['POST'])
 def get_toponyms():
@@ -105,34 +107,25 @@ def get_toponyms():
     toponyms = filter_toponyms(filters)
     return jsonify(toponyms)
 
-@app.route('/api/import', methods=['POST'])
-def import_data():
-    file = request.files.get('file')
-    if not file:
-        return jsonify({"error": "No file provided"}), 400
-
-    try:
-        file_content = file.read().decode('utf-8')
-    except UnicodeDecodeError:
-        try:
-            file.seek(0)
-            file_content = file.read().decode('windows-1251')
-        except UnicodeDecodeError:
-            return jsonify({"error": "File encoding is not supported. Please upload a UTF-8 or Windows-1251 encoded file."}), 400
-
-    try:
-        data = json.loads(file_content)
-    except json.JSONDecodeError as e:
-        return jsonify({"error": "Invalid JSON format", "details": str(e)}), 400
-
-    if "toponyms" not in data or not isinstance(data["toponyms"], list):
-        return jsonify({"error": "Invalid JSON structure. Expected 'toponyms' key with a list of toponyms."}), 400
-
+def clear_database():
+    """Удаляет все данные из базы данных."""
     with driver.session() as session:
-        try:
-            def import_tx(tx):
+        session.run("MATCH (n) DETACH DELETE n")
 
+def import_toponyms(file_path):
+    """Импортирует данные из файла JSON."""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+
+        if "toponyms" not in data or not isinstance(data["toponyms"], list):
+            raise ValueError("Invalid JSON structure. Expected 'toponyms' key with a list of toponyms.")
+
+        with driver.session() as session:
+            def import_tx(tx):
                 for toponym in data["toponyms"]:
+                    toponym_id = str(uuid.uuid4())
+
                     tx.run(
                         """
                         MERGE (t:Toponym {
@@ -144,15 +137,16 @@ def import_data():
                             Point: point({latitude: $latitude, longitude: $longitude, crs: $crs})
                         })
                         """,
-                        _id=toponym["_id"],
+                        _id=toponym_id,
                         address=toponym["Address"],
-                        constructionDateFrom=toponym["ConstructionDateFrom"],
-                        constructionDateTo=toponym["ConstructionDateTo"],
+                        constructionDateFrom=toponym.get("ConstructionDateFrom"),
+                        constructionDateTo=toponym.get("ConstructionDateTo"),
                         briefDescription=toponym["BriefDescription"],
                         latitude=toponym["Point"]["latitude"],
                         longitude=toponym["Point"]["longitude"],
                         crs=toponym["Point"]["crs"]
                     )
+
                     for style in toponym.get("style", []):
                         tx.run(
                             """
@@ -160,7 +154,7 @@ def import_data():
                             MERGE (s:Style {Name: $styleName})
                             MERGE (t)-[:STYLED]->(s)
                             """,
-                            _id=toponym["_id"],
+                            _id=toponym_id,
                             styleName=style
                         )
 
@@ -171,7 +165,7 @@ def import_data():
                             MERGE (tp:Type {Name: $typeName})
                             MERGE (t)-[:HAVE_TYPE]->(tp)
                             """,
-                            _id=toponym["_id"],
+                            _id=toponym_id,
                             typeName=type_name
                         )
 
@@ -182,7 +176,7 @@ def import_data():
                             MERGE (a:Architect {Name: $architectName})
                             MERGE (t)-[:BUILT]->(a)
                             """,
-                            _id=toponym["_id"],
+                            _id=toponym_id,
                             architectName=architect
                         )
 
@@ -193,7 +187,7 @@ def import_data():
                             MERGE (p:Photo {PhotoUrl: $photoUrl})
                             MERGE (t)-[:HAS_PHOTO]->(p)
                             """,
-                            _id=toponym["_id"],
+                            _id=toponym_id,
                             photoUrl=photo_url
                         )
 
@@ -204,22 +198,132 @@ def import_data():
                             MERGE (n:NameRecord {Name: $name, EffectiveDateFrom: $dateFrom})
                             MERGE (t)-[:RENAMED]->(n)
                             """,
-                            _id=toponym["_id"],
+                            _id=toponym_id,
                             name=name_record["Name"],
-                            dateFrom=name_record["EffectiveDateFrom"]
+                            dateFrom=name_record.get("EffectiveDateFrom")
+                        )
+
+            session.write_transaction(import_tx)
+        print("Data imported successfully.")
+
+    except Exception as e:
+        print(f"Error during data import: {e}")
+
+@app.route('/api/import', methods=['POST'])
+def import_data():
+    """Импортирует данные из загруженного файла JSON."""
+    file = request.files.get('file')
+    if not file:
+        return jsonify({"error": "No file provided"}), 400
+
+    try:
+        data = json.loads(file.read().decode('utf-8'))
+    except UnicodeDecodeError:
+        try:
+            file.seek(0)
+            data = json.loads(file.read().decode('windows-1251'))
+        except (UnicodeDecodeError, json.JSONDecodeError) as e:
+            return jsonify({"error": "Invalid file format or encoding. Supported encodings: UTF-8, Windows-1251.", "details": str(e)}), 400
+    except json.JSONDecodeError as e:
+        return jsonify({"error": "Invalid JSON format.", "details": str(e)}), 400
+
+    if "toponyms" not in data or not isinstance(data["toponyms"], list):
+        return jsonify({"error": "Invalid JSON structure. Expected 'toponyms' key with a list of toponyms."}), 400
+
+    try:
+        with driver.session() as session:
+            def import_tx(tx):
+                for toponym in data["toponyms"]:
+
+                    toponym_id = str(uuid.uuid4())
+
+                    tx.run(
+                        """
+                        MERGE (t:Toponym {_id: $_id})
+                        ON CREATE SET
+                            t.Address = $address,
+                            t.ConstructionDateTo = $constructionDateTo,
+                            t.ConstructionDateFrom = $constructionDateFrom,
+                            t.BriefDescription = $briefDescription,
+                            t.Point = point({latitude: $latitude, longitude: $longitude, crs: $crs})
+                        """,
+                        _id=toponym_id,
+                        address=toponym.get("Address"),
+                        constructionDateFrom=toponym.get("ConstructionDateFrom"),
+                        constructionDateTo=toponym.get("ConstructionDateTo"),
+                        briefDescription=toponym.get("BriefDescription"),
+                        latitude=toponym["Point"].get("latitude"),
+                        longitude=toponym["Point"].get("longitude"),
+                        crs=toponym["Point"].get("crs")
+                    )
+
+                    for style in toponym.get("style", []):
+                        tx.run(
+                            """
+                            MATCH (t:Toponym {_id: $_id})
+                            MERGE (s:Style {Name: $styleName})
+                            MERGE (t)-[:STYLED]->(s)
+                            """,
+                            _id=toponym_id,
+                            styleName=style
+                        )
+
+                    for type_name in toponym.get("types", []):
+                        tx.run(
+                            """
+                            MATCH (t:Toponym {_id: $_id})
+                            MERGE (tp:Type {Name: $typeName})
+                            MERGE (t)-[:HAVE_TYPE]->(tp)
+                            """,
+                            _id=toponym_id,
+                            typeName=type_name
+                        )
+
+                    for architect in toponym.get("architects", []):
+                        tx.run(
+                            """
+                            MATCH (t:Toponym {_id: $_id})
+                            MERGE (a:Architect {Name: $architectName})
+                            MERGE (t)-[:BUILT]->(a)
+                            """,
+                            _id=toponym_id,
+                            architectName=architect
+                        )
+
+                    for photo_url in toponym.get("photos", []):
+                        tx.run(
+                            """
+                            MATCH (t:Toponym {_id: $_id})
+                            MERGE (p:Photo {PhotoUrl: $photoUrl})
+                            MERGE (t)-[:HAS_PHOTO]->(p)
+                            """,
+                            _id=toponym_id,
+                            photoUrl=photo_url
+                        )
+
+                    for name_record in toponym.get("nameRecords", []):
+                        tx.run(
+                            """
+                            MATCH (t:Toponym {_id: $_id})
+                            MERGE (n:NameRecord {Name: $name, EffectiveDateFrom: $dateFrom})
+                            MERGE (t)-[:RENAMED]->(n)
+                            """,
+                            _id=toponym_id,
+                            name=name_record.get("Name"),
+                            dateFrom=name_record.get("EffectiveDateFrom")
                         )
 
             session.write_transaction(import_tx)
 
-        except Exception as e:
-            return jsonify({"error": "An error occurred during import", "details": str(e)}), 500
+        return jsonify({"message": "Data imported successfully."}), 200
 
-    return jsonify({"message": "Data imported successfully"}), 200
-
+    except Exception as e:
+        return jsonify({"error": "An error occurred during data import.", "details": str(e)}), 500
 
 
 @app.route('/api/export', methods=['GET'])
 def export_data():
+    """Экспортирует данные из базы данных в формате JSON с поддержкой русских символов."""
     with driver.session() as session:
         result = session.run(
             """
@@ -261,12 +365,15 @@ def export_data():
             toponyms.append(toponym)
 
         response = app.response_class(
-            response=json.dumps({"toponyms": toponyms}, ensure_ascii=False),
+            response=json.dumps({"toponyms": toponyms}, ensure_ascii=False, indent=2),
             status=200,
             mimetype='application/json'
         )
         return response
 
 
+
 if __name__ == "__main__":
+    clear_database() 
+    import_toponyms("toponyms_data.json")
     app.run(debug=True, port=5001)
