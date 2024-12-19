@@ -16,6 +16,7 @@
     [formControl]="filtersForm.controls['style']"
     [tuiTextfieldLabelOutside]="false"
     [(search)]="searchStyle"
+    class="mt-2"
   >
     Стиль
     <tui-data-list-wrapper
@@ -28,6 +29,7 @@
   <tui-select
     [formControl]="filtersForm.controls['hasPhoto']"
     [tuiTextfieldCleaner]="true"
+    class="mt-2"
   >
     Наличие фото
     <tui-data-list *tuiDataList>
@@ -40,28 +42,14 @@
   <tui-input
     [formControl]="filtersForm.controls['architect']"
     [tuiTextfieldCleaner]="true"
+    class="mt-2"
   >
     Архитектор
     <input tuiTextfieldLegacy />
   </tui-input>
 
-  <tui-input-year
-    [formControl]="filtersForm.controls['renamedDateFrom']"
-    [tuiTextfieldCleaner]="true"
-  >
-    Переименован в году от
-    <input tuiTextfieldLegacy />
-  </tui-input-year>
-
-  <tui-input-year
-    [formControl]="filtersForm.controls['renamedDateTo']"
-    [tuiTextfieldCleaner]="true"
-  >
-    Переименован в году до
-    <input tuiTextfieldLegacy />
-  </tui-input-year>
-
   <tui-input
+    class="mt-2"
     [formControl]="filtersForm.controls['cardSearch']"
     [tuiTextfieldCleaner]="true"
   >
@@ -69,7 +57,26 @@
     <input tuiTextfieldLegacy />
   </tui-input>
 
+  <tui-input
+    class="mt-2"
+    [formControl]="filtersForm.controls['address']"
+    [tuiTextfieldCleaner]="true"
+  >
+    Адрес
+    <input tuiTextfieldLegacy />
+  </tui-input>
+
+  <tui-input
+    class="mt-2"
+    [formControl]="filtersForm.controls['name']"
+    [tuiTextfieldCleaner]="true"
+  >
+    Название
+    <input tuiTextfieldLegacy />
+  </tui-input>
+
   <tui-input-year
+    class="mt-2"
     [formControl]="filtersForm.controls['constructionDateFrom']"
     [tuiTextfieldCleaner]="true"
   >
@@ -78,10 +85,29 @@
   </tui-input-year>
 
   <tui-input-year
+    class="mt-2"
     [formControl]="filtersForm.controls['constructionDateTo']"
     [tuiTextfieldCleaner]="true"
   >
     Дата постройки до
+    <input tuiTextfieldLegacy />
+  </tui-input-year>
+
+  <tui-input-year
+    class="mt-2"
+    [formControl]="filtersForm.controls['renamedDateFrom']"
+    [tuiTextfieldCleaner]="true"
+  >
+    Переименован в году от
+    <input tuiTextfieldLegacy />
+  </tui-input-year>
+
+  <tui-input-year
+    class="mt-2"
+    [formControl]="filtersForm.controls['renamedDateTo']"
+    [tuiTextfieldCleaner]="true"
+  >
+    Переименован в году до
     <input tuiTextfieldLegacy />
   </tui-input-year>
 </div>

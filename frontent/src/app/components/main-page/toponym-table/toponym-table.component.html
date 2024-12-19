@@ -1,3 +1,4 @@
+<div class="d-flex flex-column align-items-center">
 <table tuiTable class="table" [columns]="columns">
   <thead>
   <tr tuiThGroup>
@@ -24,10 +25,11 @@
   </tr>
   </tbody>
 </table>
-
 <tui-pagination
   [length]="totalPages"
   [(index)]="currentPage"
   [size]="'l'"
   (indexChange)="onPageChange($event)"
 ></tui-pagination>
+</div>
+
