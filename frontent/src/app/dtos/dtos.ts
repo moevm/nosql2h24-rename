@@ -21,4 +21,6 @@ export interface FilterDto {
   constructionDateFrom?: number | null;
   constructionDateTo?: number | null;
   page?: number | null;
+  address?: string | null;
+  name?: string | null;
 }
