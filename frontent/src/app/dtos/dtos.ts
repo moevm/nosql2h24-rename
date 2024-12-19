@@ -15,7 +15,8 @@ export interface FilterDto {
   style?: string[] | null;
   hasPhoto?: boolean | null;
   architect?: string | null;
-  renamedTo?: string | null;
+  renamedDateFrom?: number | null;
+  renamedDateTo?: number | null;
   cardSearch?: string | null;
   constructionDateFrom?: number | null;
   constructionDateTo?: number | null;
