@@ -11,6 +11,7 @@ export class ToponymsService {
   constructor(private readonly http: HttpClient) { }
 
   getToponyms(filters: FilterDto): Observable<ToponymDto[]> {
+    console.log(filters);
     const headers = { 'Content-Type': 'application/json' };
     return this.http.post<ToponymDto[]>('http://localhost:5001/api/toponyms', filters, { headers })
       .pipe(
