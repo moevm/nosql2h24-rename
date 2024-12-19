@@ -11,6 +11,7 @@ import {
 import {ToponymTableComponent} from "./toponym-table/toponym-table.component";
 import {ToponymFiltersComponent} from "./toponym-filters/toponym-filters.component";
 import {ToponymsService} from "../../services/toponyms.service";
+import {ImportExportComponent} from "./import-export/import-export.component";
 
 @Component({
   selector: 'app-main-page',
@@ -23,7 +24,8 @@ import {ToponymsService} from "../../services/toponyms.service";
     TuiInputModule,
     TuiInputYearModule,
     ToponymTableComponent,
-    ToponymFiltersComponent
+    ToponymFiltersComponent,
+    ImportExportComponent
   ],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.sass'
@@ -49,10 +51,8 @@ export class MainPageComponent implements OnInit {
 
   onFilter(filterDto: FilterDto) {
     filterDto.page = this.currentPage;
-    console.log(filterDto);
     this.toponymsService.getToponyms(filterDto).subscribe((result: ToponymDto[]) => {
       this.filteredData = result;
-      console.log(this.filteredData);
     });
   }
 }

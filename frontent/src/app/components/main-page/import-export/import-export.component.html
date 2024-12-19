@@ -1,0 +1,54 @@
+<div class="my-2">
+  <button
+    appearance="primary"
+    tuiButton
+    type="button"
+    class="full-width-btn custom-font mb-2"
+    (click)="downloadFile()"
+  >
+    Экспорт
+  </button>
+
+  <label
+    *ngIf="!control.value"
+    tuiInputFiles
+  >
+    <div *tuiInputFilesLabel>
+      Импорт
+    </div>
+    <input
+      accept=".csv"
+      tuiInputFiles
+      [formControl]="control"
+    />
+  </label>
+
+  <tui-files class="tui-space_top-1">
+    <tui-file
+      *ngIf="control.value | tuiFileRejected: {accept: '.csv'} | async as file"
+      state="error"
+      [file]="file"
+      (remove)="removeFile()"
+    ></tui-file>
+
+    <tui-file
+      *ngIf="loadedFiles$ | async as file"
+      [file]="file"
+      (remove)="removeFile()"
+    ></tui-file>
+
+    <tui-file
+      *ngIf="failedFiles$ | async as file"
+      state="error"
+      [file]="file"
+      (remove)="removeFile()"
+    ></tui-file>
+
+    <tui-file
+      *ngIf="loadingFiles$ | async as file"
+      state="loading"
+      [file]="file"
+      (remove)="removeFile()"
+    ></tui-file>
+  </tui-files>
+</div>
