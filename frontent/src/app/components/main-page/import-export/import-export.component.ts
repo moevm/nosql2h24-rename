@@ -4,7 +4,7 @@ import { catchError, finalize, map, Observable, of, Subject, switchMap } from "r
 import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { ToponymsService } from "../../../services/toponyms.service";
-import {TuiAppearance, TuiButton} from "@taiga-ui/core";
+import { TuiAppearance, TuiButton } from "@taiga-ui/core";
 
 @Component({
   selector: 'app-import-export',
@@ -15,8 +15,7 @@ import {TuiAppearance, TuiButton} from "@taiga-ui/core";
 })
 export class ImportExportComponent {
 
-  constructor(private readonly toponymsService: ToponymsService) {
-  }
+  constructor(private readonly toponymsService: ToponymsService) { }
 
   protected readonly control = new FormControl<TuiFileLike | null>(
     null,
@@ -41,7 +40,6 @@ export class ImportExportComponent {
     }
 
     this.loadingFiles$.next(file);
-
     return this.toponymsService.import(file as File).pipe(
       map(() => {
         return file;
@@ -61,7 +59,7 @@ export class ImportExportComponent {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'exported_data.csv';
+        a.download = 'exported_data.json';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
