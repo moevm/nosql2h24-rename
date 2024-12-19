@@ -57,9 +57,14 @@ def filter_toponyms(filters):
       AND ($hasPhoto IS NULL OR hasPhotoFlag = $hasPhoto)
       AND ($renamedDateFrom IS NULL OR ANY(year IN renameYears WHERE year >= $renamedDateFrom))
       AND ($renamedDateTo IS NULL OR ANY(year IN renameYears WHERE year <= $renamedDateTo))
+      AND ($address IS NULL OR toLower(t.Address) CONTAINS toLower($address))
+      AND ($name IS NULL OR toLower(COALESCE(latestName, t.BriefDescription)) CONTAINS toLower($name))
       AND ($cardSearch IS NULL OR (
-            t.Address CONTAINS $cardSearch OR
-            t.BriefDescription CONTAINS $cardSearch
+            toLower(t.Address) CONTAINS toLower($cardSearch) OR
+            toLower(t.BriefDescription) CONTAINS toLower($cardSearch) OR
+            ANY(style_param IN styles WHERE toLower(style_param) CONTAINS toLower($cardSearch)) OR
+            ANY(type_param IN types WHERE toLower(type_param) CONTAINS toLower($cardSearch)) OR
+            ANY(architect IN architects WHERE toLower(architect) CONTAINS toLower($cardSearch))
           ))
       AND ($constructionDateFrom IS NULL OR t.ConstructionDateFrom >= $constructionDateFrom)
       AND ($constructionDateTo IS NULL OR t.ConstructionDateTo <= $constructionDateTo)
@@ -79,6 +84,8 @@ def filter_toponyms(filters):
         "renamedDateFrom": int(filters.get("renamedDateFrom")) if filters.get("renamedDateFrom") else None,
         "renamedDateTo": int(filters.get("renamedDateTo")) if filters.get("renamedDateTo") else None,
         "cardSearch": filters.get("cardSearch"),
+        "address": filters.get("address"),
+        "name": filters.get("name"),
         "constructionDateFrom": filters.get("constructionDateFrom"),
         "constructionDateTo": filters.get("constructionDateTo"),
         "skip": skip,
@@ -99,7 +106,7 @@ def filter_toponyms(filters):
                 "architect": record["architects"]
             })
         return toponyms
-    
+
 
 @app.route('/api/toponyms', methods=['POST'])
 def get_toponyms():
