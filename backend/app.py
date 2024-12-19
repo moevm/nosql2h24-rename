@@ -107,94 +107,116 @@ def get_toponyms():
 
 @app.route('/api/import', methods=['POST'])
 def import_data():
-    file = request.files['file']
+    file = request.files.get('file')
     if not file:
         return jsonify({"error": "No file provided"}), 400
 
-    data = json.load(file)
+    try:
+        file_content = file.read().decode('utf-8')
+    except UnicodeDecodeError:
+        try:
+            file.seek(0)
+            file_content = file.read().decode('windows-1251')
+        except UnicodeDecodeError:
+            return jsonify({"error": "File encoding is not supported. Please upload a UTF-8 or Windows-1251 encoded file."}), 400
+
+    try:
+        data = json.loads(file_content)
+    except json.JSONDecodeError as e:
+        return jsonify({"error": "Invalid JSON format", "details": str(e)}), 400
+
+    if "toponyms" not in data or not isinstance(data["toponyms"], list):
+        return jsonify({"error": "Invalid JSON structure. Expected 'toponyms' key with a list of toponyms."}), 400
+
     with driver.session() as session:
-        session.run("MATCH (n) DETACH DELETE n")
+        try:
+            def import_tx(tx):
 
-        for toponym in data["toponyms"]:
-            session.run(
-                """
-                MERGE (t:Toponym {
-                    _id: $_id,
-                    Address: $address,
-                    ConstructionDateTo: $constructionDateTo,
-                    ConstructionDateFrom: $constructionDateFrom,
-                    BriefDescription: $briefDescription,
-                    Point: point({latitude: $latitude, longitude: $longitude, crs: $crs})
-                })
-                """,
-                _id=toponym["_id"],
-                address=toponym["Address"],
-                constructionDateFrom=toponym["ConstructionDateFrom"],
-                constructionDateTo=toponym["ConstructionDateTo"],
-                briefDescription=toponym["BriefDescription"],
-                latitude=toponym["Point"]["latitude"],
-                longitude=toponym["Point"]["longitude"],
-                crs=toponym["Point"]["crs"]
-            )
+                for toponym in data["toponyms"]:
+                    tx.run(
+                        """
+                        MERGE (t:Toponym {
+                            _id: $_id,
+                            Address: $address,
+                            ConstructionDateTo: $constructionDateTo,
+                            ConstructionDateFrom: $constructionDateFrom,
+                            BriefDescription: $briefDescription,
+                            Point: point({latitude: $latitude, longitude: $longitude, crs: $crs})
+                        })
+                        """,
+                        _id=toponym["_id"],
+                        address=toponym["Address"],
+                        constructionDateFrom=toponym["ConstructionDateFrom"],
+                        constructionDateTo=toponym["ConstructionDateTo"],
+                        briefDescription=toponym["BriefDescription"],
+                        latitude=toponym["Point"]["latitude"],
+                        longitude=toponym["Point"]["longitude"],
+                        crs=toponym["Point"]["crs"]
+                    )
+                    for style in toponym.get("style", []):
+                        tx.run(
+                            """
+                            MATCH (t:Toponym {_id: $_id})
+                            MERGE (s:Style {Name: $styleName})
+                            MERGE (t)-[:STYLED]->(s)
+                            """,
+                            _id=toponym["_id"],
+                            styleName=style
+                        )
 
-            for style in toponym["style"]:
-                session.run(
-                    """
-                    MATCH (t:Toponym {_id: $_id})
-                    MERGE (s:Style {Name: $styleName})
-                    MERGE (t)-[:STYLED]->(s)
-                    """,
-                    _id=toponym["_id"],
-                    styleName=style
-                )
+                    for type_name in toponym.get("types", []):
+                        tx.run(
+                            """
+                            MATCH (t:Toponym {_id: $_id})
+                            MERGE (tp:Type {Name: $typeName})
+                            MERGE (t)-[:HAVE_TYPE]->(tp)
+                            """,
+                            _id=toponym["_id"],
+                            typeName=type_name
+                        )
 
-            for type in toponym["types"]:
-                session.run(
-                    """
-                    MATCH (t:Toponym {_id: $_id})
-                    MERGE (tp:Type {Name: $typeName})
-                    MERGE (t)-[:HAVE_TYPE]->(tp)
-                    """,
-                    _id=toponym["_id"],
-                    typeName=type
-                )
+                    for architect in toponym.get("architects", []):
+                        tx.run(
+                            """
+                            MATCH (t:Toponym {_id: $_id})
+                            MERGE (a:Architect {Name: $architectName})
+                            MERGE (t)-[:BUILT]->(a)
+                            """,
+                            _id=toponym["_id"],
+                            architectName=architect
+                        )
 
-            for architect in toponym["architects"]:
-                session.run(
-                    """
-                    MATCH (t:Toponym {_id: $_id})
-                    MERGE (a:Architect {Name: $architectName})
-                    MERGE (t)-[:BUILT]->(a)
-                    """,
-                    _id=toponym["_id"],
-                    architectName=architect
-                )
+                    for photo_url in toponym.get("photos", []):
+                        tx.run(
+                            """
+                            MATCH (t:Toponym {_id: $_id})
+                            MERGE (p:Photo {PhotoUrl: $photoUrl})
+                            MERGE (t)-[:HAS_PHOTO]->(p)
+                            """,
+                            _id=toponym["_id"],
+                            photoUrl=photo_url
+                        )
 
-            for photo_url in toponym["photos"]:
-                session.run(
-                    """
-                    MATCH (t:Toponym {_id: $_id})
-                    MERGE (p:Photo {PhotoUrl: $photoUrl})
-                    MERGE (t)-[:HAS_PHOTO]->(p)
-                    """,
-                    _id=toponym["_id"],
-                    photoUrl=photo_url
-                )
+                    for name_record in toponym.get("nameRecords", []):
+                        tx.run(
+                            """
+                            MATCH (t:Toponym {_id: $_id})
+                            MERGE (n:NameRecord {Name: $name, EffectiveDateFrom: $dateFrom})
+                            MERGE (t)-[:RENAMED]->(n)
+                            """,
+                            _id=toponym["_id"],
+                            name=name_record["Name"],
+                            dateFrom=name_record["EffectiveDateFrom"]
+                        )
 
-            for name_record in toponym["nameRecords"]:
-                session.run(
-                    """
-                    MERGE (n:NameRecord {Name: $name, EffectiveDateFrom: $dateFrom})
-                    WITH n
-                    MATCH (t:Toponym {_id: $_id})
-                    MERGE (t)-[:RENAMED]->(n)
-                    """,
-                    _id=toponym["_id"],
-                    name=name_record["Name"],
-                    dateFrom=name_record["EffectiveDateFrom"]
-                )
+            session.write_transaction(import_tx)
+
+        except Exception as e:
+            return jsonify({"error": "An error occurred during import", "details": str(e)}), 500
 
     return jsonify({"message": "Data imported successfully"}), 200
+
+
 
 @app.route('/api/export', methods=['GET'])
 def export_data():
@@ -216,29 +238,34 @@ def export_data():
             """
         )
 
-        output = BytesIO()
-        text_output = TextIOWrapper(output, encoding='utf-8', newline='')  # Обертка для работы с текстом
-        writer = csv.writer(text_output, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow(["id", "address", "constructionDateFrom", "constructionDateTo", "briefDescription",
-                         "latitude", "longitude", "crs", "styles", "types", "architects", "photos", "nameRecords"])
+        toponyms = []
 
         for record in result:
-            writer.writerow([
-                record["id"], record["address"], record["constructionDateFrom"],
-                record["constructionDateTo"], record["briefDescription"], record["latitude"],
-                record["longitude"], record["crs"], json.dumps(record["styles"]),
-                json.dumps(record["types"]), json.dumps(record["architects"]),
-                json.dumps(record["photos"]), json.dumps(record["nameRecords"])
-            ])
+            toponym = {
+                "_id": record["id"],
+                "Address": record["address"],
+                "ConstructionDateFrom": record["constructionDateFrom"],
+                "ConstructionDateTo": record["constructionDateTo"],
+                "BriefDescription": record["briefDescription"],
+                "Point": {
+                    "latitude": record["latitude"],
+                    "longitude": record["longitude"],
+                    "crs": record["crs"]
+                },
+                "style": record["styles"],
+                "types": record["types"],
+                "architects": record["architects"],
+                "photos": record["photos"],
+                "nameRecords": record["nameRecords"]
+            }
+            toponyms.append(toponym)
 
-        text_output.flush()  
-        output.seek(0)
-        return send_file(
-            output,
-            mimetype='text/csv',
-            as_attachment=True,
-            download_name='toponyms.csv'
+        response = app.response_class(
+            response=json.dumps({"toponyms": toponyms}, ensure_ascii=False),
+            status=200,
+            mimetype='application/json'
         )
+        return response
 
 
 if __name__ == "__main__":
