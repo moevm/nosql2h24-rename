@@ -48,10 +48,13 @@ export class ToponymFiltersComponent implements OnInit {
     style: new FormControl<string[] | null>(null),
     hasPhoto: new FormControl<boolean | null>(null),
     architect: new FormControl<string | null>(null),
-    renamedTo: new FormControl<string | null>(null),
+    renamedDateFrom: new FormControl<number | null>(null),
+    renamedDateTo: new FormControl<number | null>(null),
     cardSearch: new FormControl<string | null>(null),
     constructionDateFrom: new FormControl<number | null>(null),
     constructionDateTo: new FormControl<number | null>(null),
+    address: new FormControl<string | null>(null),
+    name: new FormControl<string | null>(null),
   });
 
   searchType: string | null = '';
@@ -80,10 +83,13 @@ export class ToponymFiltersComponent implements OnInit {
       style: (filters.style && filters.style?.length > 0) ? filters.style : null,
       hasPhoto: filters.hasPhoto,
       architect: filters.architect,
-      renamedTo: filters.renamedTo,
+      renamedDateFrom: filters.renamedDateFrom,
+      renamedDateTo: filters.renamedDateTo,
       cardSearch: filters.cardSearch,
       constructionDateFrom: filters.constructionDateFrom,
       constructionDateTo: filters.constructionDateTo,
+      address: filters.address,
+      name: filters.name,
     };
     this.filtersChanged.emit(filterDto);
   }
