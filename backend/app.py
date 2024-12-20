@@ -6,10 +6,12 @@ from neo4j import GraphDatabase
 from io import BytesIO, TextIOWrapper
 from flask_cors import CORS
 from io import StringIO
+import os
 
-uri = "bolt://localhost:7687"
-username = "neo4j"
-password = "12345678"
+uri = os.getenv("NEO4J_URI", "bolt://neo4j:7687")
+username = os.getenv("NEO4J_USER", "neo4j")
+password = os.getenv("NEO4J_PASSWORD", "12345678")
+
 driver = GraphDatabase.driver(uri, auth=(username, password))
 
 app = Flask(__name__)
