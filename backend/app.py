@@ -89,9 +89,9 @@ def filter_toponyms(filters):
         "address": filters.get("address"),
         "name": filters.get("name"),
         "constructionDateFrom": filters.get("constructionDateFrom"),
-        "constructionDateTo": filters.get("constructionDateTo"),
-        "skip": skip,
-        "limit": LIMIT
+        "constructionDateTo": filters.get("constructionDateTo")#,
+        #"skip": skip,
+        #"limit": LIMIT
     }
 
     with driver.session() as session:
