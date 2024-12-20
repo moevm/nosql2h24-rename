@@ -385,4 +385,4 @@ def export_data():
 if __name__ == "__main__":
     clear_database() 
     import_toponyms("toponyms_data.json")
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5001, host='0.0.0.0')

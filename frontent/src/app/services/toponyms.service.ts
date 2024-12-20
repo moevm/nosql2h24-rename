@@ -8,7 +8,7 @@ import { catchError, Observable, throwError } from "rxjs";
 })
 export class ToponymsService {
 
-  private readonly API_BASE_URL = 'http://backend:5001/api';
+  private readonly API_BASE_URL = 'http://127.0.0.1:5001/api';
 
   constructor(private readonly http: HttpClient) { }
 
