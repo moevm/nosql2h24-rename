@@ -55,7 +55,7 @@ def filter_toponyms(filters):
          CASE WHEN p IS NOT NULL THEN true ELSE false END AS hasPhotoFlag
     WHERE ($style IS NULL OR ANY(style_param IN $style WHERE style_param IN styles))
       AND ($type IS NULL OR ANY(type_param IN $type WHERE type_param IN types))
-      AND ($architect IS NULL OR ANY(architect IN architects WHERE architect CONTAINS $architect))
+      AND ($architect IS NULL OR ANY(architect IN architects WHERE toLower(architect) CONTAINS toLower($architect)))
       AND ($hasPhoto IS NULL OR hasPhotoFlag = $hasPhoto)
       AND ($renamedDateFrom IS NULL OR ANY(year IN renameYears WHERE year >= $renamedDateFrom))
       AND ($renamedDateTo IS NULL OR ANY(year IN renameYears WHERE year <= $renamedDateTo))
