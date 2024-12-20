@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { FilterDto, ToponymDto } from "../dtos/dtos";
-import { catchError, Observable, throwError } from "rxjs";
+import { catchError, Observable, Subject, throwError } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ToponymsService {
+  filtersChanged$ = new Subject<FilterDto>();
 
   private readonly API_BASE_URL = 'http://127.0.0.1:5001/api';
 

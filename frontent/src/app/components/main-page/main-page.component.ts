@@ -43,6 +43,11 @@ export class MainPageComponent implements OnInit {
 
   ngOnInit() {
     this.onFilter({});
+
+    this.toponymsService.filtersChanged$.subscribe(filters => {
+      console.log(filters);
+      this.onFilter(filters);
+    })
   }
 
   onPageChanged(page: number) {

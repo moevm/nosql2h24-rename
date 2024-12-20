@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ToponymDto} from "../../../dtos/dtos";
 import {NgForOf} from "@angular/common";
 import {TuiPagination} from "@taiga-ui/kit";
@@ -11,6 +11,7 @@ import {
   TuiTableThGroup, TuiTableTr
 } from "@taiga-ui/addon-table";
 import {SafeUrlPipe} from "../../../pipes/safe-url.pipe";
+import {ToponymsService} from "../../../services/toponyms.service";
 
 @Component({
   selector: 'app-toponym-table',
@@ -29,7 +30,7 @@ import {SafeUrlPipe} from "../../../pipes/safe-url.pipe";
     SafeUrlPipe
   ],
 })
-export class ToponymTableComponent {
+export class ToponymTableComponent implements OnInit {
   @Output() pageChanged = new EventEmitter<number>();
 
   @Input() data: ToponymDto[] = [];
@@ -38,6 +39,9 @@ export class ToponymTableComponent {
 
   currentPage = 0;
 
+  constructor(private readonly toponymsService: ToponymsService) {
+  }
+
   get paginatedData(): ToponymDto[] {
     const startIndex = this.currentPage * this.pageSize;
     return this.data.slice(startIndex, startIndex + this.pageSize);
@@ -45,6 +49,12 @@ export class ToponymTableComponent {
 
   get totalPages(): number {
     return Math.ceil(this.data.length / this.pageSize);
+  }
+
+  ngOnInit() {
+    this.toponymsService.filtersChanged$.subscribe((result) => {
+      this.currentPage = 0;
+    });
   }
 
   onPageChange(page: number) {
