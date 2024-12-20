@@ -10,6 +10,12 @@ services:
       NEO4J_AUTH: "neo4j/12345678"
     volumes:
       - neo4j_data:/data
+    healthcheck:
+      test: ["CMD", "wget", "http://localhost:7474"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s 
 
   backend:
     build:
@@ -23,7 +29,8 @@ services:
       - NEO4J_USER=neo4j
       - NEO4J_PASSWORD=12345678
     depends_on:
-      - neo4j
+      neo4j:
+        condition: service_healthy
 
   frontend:
     build:
