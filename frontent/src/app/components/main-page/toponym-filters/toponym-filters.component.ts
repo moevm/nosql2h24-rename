@@ -10,6 +10,7 @@ import {
   TuiTextfieldControllerModule
 } from "@taiga-ui/legacy";
 import {TuiTextfield} from "@taiga-ui/core";
+import {ToponymsService} from "../../../services/toponyms.service";
 
 const TYPES: readonly string[] = [
   'Мост',
@@ -41,7 +42,9 @@ const STYLES: readonly string[] = [
   styleUrl: './toponym-filters.component.sass'
 })
 export class ToponymFiltersComponent implements OnInit {
-  @Output() filtersChanged = new EventEmitter<FilterDto>();
+
+  constructor(private readonly toponymsService: ToponymsService) {
+  }
 
   filtersForm = new FormGroup({
     type: new FormControl<string[] | null>(null),
@@ -82,15 +85,15 @@ export class ToponymFiltersComponent implements OnInit {
       type: (filters.type && filters.type?.length > 0) ? filters.type : null,
       style: (filters.style && filters.style?.length > 0) ? filters.style : null,
       hasPhoto: filters.hasPhoto,
-      architect: filters.architect,
+      architect: (filters.architect && filters.architect?.length > 0) ? filters.architect : null,
       renamedDateFrom: filters.renamedDateFrom,
       renamedDateTo: filters.renamedDateTo,
-      cardSearch: filters.cardSearch,
+      cardSearch: (filters.cardSearch && filters.cardSearch?.length > 0) ? filters.cardSearch : null,
       constructionDateFrom: filters.constructionDateFrom,
       constructionDateTo: filters.constructionDateTo,
-      address: filters.address,
-      name: filters.name,
+      address: (filters.address && filters.address?.length > 0) ? filters.address : null,
+      name: (filters.name && filters.name?.length > 0) ? filters.name : null,
     };
-    this.filtersChanged.emit(filterDto);
+    this.toponymsService.filtersChanged$.next(filterDto);
   }
 }
