@@ -68,7 +68,8 @@ def filter_toponyms(filters):
             toLower(t.BriefDescription) CONTAINS toLower($cardSearch) OR
             ANY(style_param IN styles WHERE toLower(style_param) CONTAINS toLower($cardSearch)) OR
             ANY(type_param IN types WHERE toLower(type_param) CONTAINS toLower($cardSearch)) OR
-            ANY(architect IN architects WHERE toLower(architect) CONTAINS toLower($cardSearch))
+            ANY(architect IN architects WHERE toLower(architect) CONTAINS toLower($cardSearch)) OR
+            ANY(year in renameYears WHERE toString(year) CONTAINS $cardSearch)
           ))
       AND ($constructionDateFrom IS NULL OR t.ConstructionDateFrom >= $constructionDateFrom)
       AND ($constructionDateTo IS NULL OR t.ConstructionDateTo <= $constructionDateTo)
