@@ -8,6 +8,7 @@ from flask_cors import CORS
 from io import StringIO
 import os
 
+
 uri = os.getenv("NEO4J_URI", "bolt://neo4j:7687")
 auth = os.getenv("NEO4J_AUTH", "neo4j/12345678").split('/')
 username = auth[0]
