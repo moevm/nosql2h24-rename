@@ -59,8 +59,8 @@ def filter_toponyms(filters):
       AND ($type IS NULL OR ANY(type_param IN $type WHERE type_param IN types))
       AND ($architect IS NULL OR ANY(architect IN architects WHERE toLower(architect) CONTAINS toLower($architect)))
       AND ($hasPhoto IS NULL OR hasPhotoFlag = $hasPhoto)
-      AND ($renamedDateFrom IS NULL OR ANY(year IN renameYears WHERE year >= $renamedDateFrom))
-      AND ($renamedDateTo IS NULL OR ANY(year IN renameYears WHERE year <= $renamedDateTo))
+      AND ($renamedDateFrom IS NULL OR ALL(year IN renameYears WHERE year >= $renamedDateFrom))
+      AND ($renamedDateTo IS NULL OR ALL(year IN renameYears WHERE year <= $renamedDateTo))
       AND ($address IS NULL OR toLower(t.Address) CONTAINS toLower($address))
       AND ($name IS NULL OR toLower(COALESCE(latestName, t.BriefDescription)) CONTAINS toLower($name))
       AND ($cardSearch IS NULL OR (
