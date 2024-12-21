@@ -9,8 +9,9 @@ from io import StringIO
 import os
 
 uri = os.getenv("NEO4J_URI", "bolt://neo4j:7687")
-username = os.getenv("NEO4J_USER", "neo4j")
-password = os.getenv("NEO4J_PASSWORD", "12345678")
+auth = os.getenv("NEO4J_AUTH", "neo4j/12345678").split('/')
+username = auth[0]
+password = auth[1]
 
 driver = GraphDatabase.driver(uri, auth=(username, password))
 
@@ -384,5 +385,5 @@ def export_data():
 
 if __name__ == "__main__":
     clear_database() 
-    import_toponyms("toponyms_data.json")
+    import_toponyms("db/toponyms_data.json")
     app.run(debug=True, port=5001, host='0.0.0.0')

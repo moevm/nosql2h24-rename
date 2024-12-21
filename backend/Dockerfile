@@ -5,7 +5,9 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY app.py /app/app.py
+
+VOLUME ["/app/db"]
 
 ENV NEO4J_URI=bolt://neo4j:7687
 ENV NEO4J_USER=neo4j

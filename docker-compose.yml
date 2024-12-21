@@ -22,8 +22,9 @@ services:
     ports:
       - "127.0.0.1:5001:5001"
     environment:
-      - NEO4J_USER=${NEO4J_USER}
-      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+      NEO4J_AUTH: ${NEO4J_AUTH}
+    volumes:
+      - ./backend/db:/app/db
     depends_on:
       db:
         condition: service_healthy
