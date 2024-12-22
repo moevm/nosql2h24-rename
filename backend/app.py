@@ -384,7 +384,6 @@ def export_data():
         return response
 
 
-
 if __name__ == "__main__":
     clear_database() 
     import_toponyms("db/toponyms_data.json")
