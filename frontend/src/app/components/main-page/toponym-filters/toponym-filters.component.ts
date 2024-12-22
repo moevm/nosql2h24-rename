@@ -96,4 +96,10 @@ export class ToponymFiltersComponent implements OnInit {
     };
     this.toponymsService.filtersChanged$.next(filterDto);
   }
+
+  stringifyOption = (value: boolean | null): string => {
+    if (value === true) return 'Есть';
+    if (value === false) return 'Нет';
+    return 'Не выбрано';
+  };
 }

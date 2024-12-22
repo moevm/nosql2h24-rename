@@ -27,6 +27,7 @@
   </tui-multi-select>
 
   <tui-select
+    [stringify]="stringifyOption"
     [formControl]="filtersForm.controls['hasPhoto']"
     [tuiTextfieldCleaner]="true"
     class="mt-2"

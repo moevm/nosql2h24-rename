@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ToponymDto} from "../../../dtos/dtos";
 import {NgForOf} from "@angular/common";
 import {TuiPagination} from "@taiga-ui/kit";
@@ -12,6 +12,7 @@ import {
 } from "@taiga-ui/addon-table";
 import {SafeUrlPipe} from "../../../pipes/safe-url.pipe";
 import {ToponymsService} from "../../../services/toponyms.service";
+import {debounceTime, Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-toponym-table',
@@ -30,7 +31,7 @@ import {ToponymsService} from "../../../services/toponyms.service";
     SafeUrlPipe
   ],
 })
-export class ToponymTableComponent implements OnInit {
+export class ToponymTableComponent implements OnInit, OnDestroy {
   @Output() pageChanged = new EventEmitter<number>();
 
   @Input() data: ToponymDto[] = [];
@@ -38,6 +39,8 @@ export class ToponymTableComponent implements OnInit {
   @Input() pageSize = 5;
 
   currentPage = 0;
+
+  private destroy$ = new Subject<void>();
 
   constructor(private readonly toponymsService: ToponymsService) {
   }
@@ -52,7 +55,8 @@ export class ToponymTableComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.toponymsService.filtersChanged$.subscribe((result) => {
+    this.toponymsService.filtersChanged$.pipe(debounceTime(300),
+      takeUntil(this.destroy$)).subscribe((result) => {
       this.currentPage = 0;
     });
   }
@@ -60,5 +64,10 @@ export class ToponymTableComponent implements OnInit {
   onPageChange(page: number) {
     this.currentPage = page;
     this.pageChanged.emit(page);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FilterDto, ToponymDto} from "../../dtos/dtos";
 import {ReactiveFormsModule} from "@angular/forms";
 import {
@@ -12,6 +12,7 @@ import {ToponymTableComponent} from "./toponym-table/toponym-table.component";
 import {ToponymFiltersComponent} from "./toponym-filters/toponym-filters.component";
 import {ToponymsService} from "../../services/toponyms.service";
 import {ImportExportComponent} from "./import-export/import-export.component";
+import {debounceTime, Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-main-page',
@@ -30,8 +31,9 @@ import {ImportExportComponent} from "./import-export/import-export.component";
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.sass'
 })
-export class MainPageComponent implements OnInit {
+export class MainPageComponent implements OnInit, OnDestroy {
 
+  private destroy$ = new Subject<void>();
   constructor(private readonly toponymsService: ToponymsService) {
   }
 
@@ -44,10 +46,10 @@ export class MainPageComponent implements OnInit {
   ngOnInit() {
     this.onFilter({});
 
-    this.toponymsService.filtersChanged$.subscribe(filters => {
-      console.log(filters);
-      this.onFilter(filters);
-    })
+    this.toponymsService.filtersChanged$.pipe(debounceTime(300), takeUntil(this.destroy$))
+      .subscribe(filters => {
+        this.onFilter(filters);
+      });
   }
 
   onPageChanged(page: number) {
@@ -59,5 +61,10 @@ export class MainPageComponent implements OnInit {
     this.toponymsService.getToponyms(filterDto).subscribe((result: ToponymDto[]) => {
       this.filteredData = result;
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
