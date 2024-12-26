@@ -73,7 +73,9 @@ def filter_toponyms(filters):
           ))
       AND ($constructionDateFrom IS NULL OR t.ConstructionDateFrom >= $constructionDateFrom)
       AND ($constructionDateTo IS NULL OR t.ConstructionDateTo <= $constructionDateTo)
-    RETURN COALESCE(latestName, t.BriefDescription) AS name,
+    RETURN t._id AS id,
+           COALESCE(latestName, t.BriefDescription) AS name,
+           t.BriefDescription AS briefDescription,
            renameYears,
            t.Address AS address,
            photoUrl,
@@ -92,9 +94,7 @@ def filter_toponyms(filters):
         "address": filters.get("address"),
         "name": filters.get("name"),
         "constructionDateFrom": filters.get("constructionDateFrom"),
-        "constructionDateTo": filters.get("constructionDateTo")#,
-        #"skip": skip,
-        #"limit": LIMIT
+        "constructionDateTo": filters.get("constructionDateTo")
     }
 
     with driver.session() as session:
@@ -102,7 +102,9 @@ def filter_toponyms(filters):
         toponyms = []
         for record in result:
             toponyms.append({
+                "id": record["id"],
                 "name": record["name"],
+                "briefDescription": record["briefDescription"],  # Добавлено
                 "renameYears": record["renameYears"],
                 "address": record["address"],
                 "photoUrl": record["photoUrl"] if record["photoUrl"] else None,
@@ -111,6 +113,72 @@ def filter_toponyms(filters):
                 "architect": record["architects"]
             })
         return toponyms
+
+@app.route('/api/toponyms_by_id', methods=['POST'])
+def get_toponym_by_id():
+    data = request.json
+    toponym_id = data.get("id") 
+
+    if not toponym_id:
+        return jsonify({"error": "Parameter 'id' is required"}), 400
+
+    query = """
+    MATCH (t:Toponym {_id: $id})
+    OPTIONAL MATCH (t)-[:STYLED]->(s:Style)
+    OPTIONAL MATCH (t)-[:BUILT]->(a:Architect)
+    OPTIONAL MATCH (t)-[:HAVE_TYPE]->(tp:Type)
+    OPTIONAL MATCH (t)-[:HAS_PHOTO]->(p:Photo)
+    OPTIONAL MATCH (t)-[:RENAMED]->(nr:NameRecord)
+    WITH t, s, a, tp, p, nr
+    ORDER BY nr.EffectiveDateFrom DESC
+    WITH t,
+         COLLECT(DISTINCT s.Name) AS styles,
+         COLLECT(DISTINCT a.Name) AS architects,
+         COLLECT(DISTINCT tp.Name) AS types,
+         COLLECT(DISTINCT p.PhotoUrl) AS photoUrls, 
+         COLLECT(DISTINCT {
+            name: nr.Name,
+            year: CASE
+                      WHEN nr.EffectiveDateFrom IS NOT NULL AND nr.EffectiveDateFrom <> '' THEN
+                          toInteger(substring(toString(nr.EffectiveDateFrom), 0, 4))
+                      ELSE NULL
+                  END
+         }) AS renameDetails,
+         HEAD(COLLECT(nr.Name)) AS latestName
+    RETURN t._id AS id,
+           COALESCE(latestName, t.BriefDescription) AS name,
+           t.BriefDescription AS briefDescription,
+           [detail IN renameDetails WHERE detail.year IS NOT NULL | detail.year] AS renameYears,
+           renameDetails AS renames,
+           t.Address AS address,
+           photoUrls,  
+           types,
+           styles,
+           architects
+    """
+    parameters = {"id": toponym_id}
+
+    with driver.session() as session:
+        record = session.run(query, **parameters).single()
+        if record:
+            toponym = {
+                "id": record["id"],
+                "name": record["name"],
+                "briefDescription": record["briefDescription"],
+                "renameYears": record["renameYears"],
+                "renames": record["renames"],
+                "address": record["address"],
+                "photoUrls": record["photoUrls"],  # Добавляем массив URL
+                "type": record["types"],
+                "style": record["styles"],
+                "architect": record["architects"]
+            }
+            return jsonify(toponym)
+        else:
+            return jsonify({"error": "Toponym not found"}), 404
+
+
+
 
 
 @app.route('/api/toponyms', methods=['POST'])
@@ -223,7 +291,7 @@ def import_toponyms(file_path):
 
 @app.route('/api/import', methods=['POST'])
 def import_data():
-    """Импортирует данные из загруженного файла JSON."""
+    """Импортирует данные из загруженного файла JSON и возвращает количество добавленных записей."""
     file = request.files.get('file')
     if not file:
         return jsonify({"error": "No file provided"}), 400
@@ -245,11 +313,11 @@ def import_data():
     try:
         with driver.session() as session:
             def import_tx(tx):
+                added_count = 0
                 for toponym in data["toponyms"]:
-
                     toponym_id = str(uuid.uuid4())
 
-                    tx.run(
+                    result = tx.run(
                         """
                         MERGE (t:Toponym {_id: $_id})
                         ON CREATE SET
@@ -258,6 +326,7 @@ def import_data():
                             t.ConstructionDateFrom = $constructionDateFrom,
                             t.BriefDescription = $briefDescription,
                             t.Point = point({latitude: $latitude, longitude: $longitude, crs: $crs})
+                        RETURN t
                         """,
                         _id=toponym_id,
                         address=toponym.get("Address"),
@@ -268,6 +337,9 @@ def import_data():
                         longitude=toponym["Point"].get("longitude"),
                         crs=toponym["Point"].get("crs")
                     )
+
+                    if result.single():  # Если запись создана
+                        added_count += 1
 
                     for style in toponym.get("style", []):
                         tx.run(
@@ -325,12 +397,15 @@ def import_data():
                             dateFrom=name_record.get("EffectiveDateFrom")
                         )
 
-            session.write_transaction(import_tx)
+                return added_count
 
-        return jsonify({"message": "Data imported successfully."}), 200
+            added_records = session.write_transaction(import_tx)
+
+        return jsonify({"message": "Data imported successfully.", "addedRecords": added_records}), 200
 
     except Exception as e:
         return jsonify({"error": "An error occurred during data import.", "details": str(e)}), 500
+
 
 
 @app.route('/api/export', methods=['GET'])
