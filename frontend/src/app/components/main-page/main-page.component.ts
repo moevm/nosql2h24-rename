@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FilterDto, ToponymDto} from "../../dtos/dtos";
+import {FilterDto, TableToponymDto} from "../../dtos/dtos";
 import {ReactiveFormsModule} from "@angular/forms";
 import {
   TuiInputModule,
@@ -37,11 +37,11 @@ export class MainPageComponent implements OnInit, OnDestroy {
   constructor(private readonly toponymsService: ToponymsService) {
   }
 
-  filteredData: ToponymDto[] = [];
+  filteredData: TableToponymDto[] = [];
   pageSize = 5;
   currentPage = 1;
 
-  columns = ['Название', 'Годы', 'Адрес', 'Фото', 'Тип', 'Стиль', 'Архитектор'];
+  columns = ['Название', 'Годы', 'Адрес', 'Фото', 'Тип', 'Стиль', 'Архитектор', 'Описание'];
 
   ngOnInit() {
     this.onFilter({});
@@ -58,7 +58,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   onFilter(filterDto: FilterDto) {
     filterDto.page = this.currentPage;
-    this.toponymsService.getToponyms(filterDto).subscribe((result: ToponymDto[]) => {
+    this.toponymsService.getToponyms(filterDto).subscribe((result: TableToponymDto[]) => {
       this.filteredData = result;
     });
   }

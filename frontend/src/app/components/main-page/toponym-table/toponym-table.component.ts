@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {ToponymDto} from "../../../dtos/dtos";
+import {TableToponymDto} from "../../../dtos/dtos";
 import {NgForOf} from "@angular/common";
 import {TuiPagination} from "@taiga-ui/kit";
 import {
@@ -13,6 +13,7 @@ import {
 import {SafeUrlPipe} from "../../../pipes/safe-url.pipe";
 import {ToponymsService} from "../../../services/toponyms.service";
 import {debounceTime, Subject, takeUntil} from "rxjs";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-toponym-table',
@@ -34,7 +35,7 @@ import {debounceTime, Subject, takeUntil} from "rxjs";
 export class ToponymTableComponent implements OnInit, OnDestroy {
   @Output() pageChanged = new EventEmitter<number>();
 
-  @Input() data: ToponymDto[] = [];
+  @Input() data: TableToponymDto[] = [];
   @Input() columns: string[] = [];
   @Input() pageSize = 5;
 
@@ -42,10 +43,10 @@ export class ToponymTableComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private readonly toponymsService: ToponymsService) {
+  constructor(private readonly toponymsService: ToponymsService, private readonly router: Router) {
   }
 
-  get paginatedData(): ToponymDto[] {
+  get paginatedData(): TableToponymDto[] {
     const startIndex = this.currentPage * this.pageSize;
     return this.data.slice(startIndex, startIndex + this.pageSize);
   }
@@ -69,5 +70,16 @@ export class ToponymTableComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  onRowClick(toponymId: string): void {
+    this.toponymsService.getToponymById(toponymId).subscribe({
+      next: (toponym) => {
+        this.router.navigate(['/toponym', toponym.id]);
+      },
+      error: (err) => {
+        console.error('Error fetching toponym:', err);
+      }
+    });
   }
 }

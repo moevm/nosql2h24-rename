@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import { FilterDto, ToponymDto } from "../dtos/dtos";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { FilterDto, TableToponymDto, ToponymDto } from "../dtos/dtos";
 import { catchError, Observable, Subject, throwError } from "rxjs";
 
 @Injectable({
@@ -13,9 +13,9 @@ export class ToponymsService {
 
   constructor(private readonly http: HttpClient) { }
 
-  getToponyms(filters: FilterDto): Observable<ToponymDto[]> {
+  getToponyms(filters: FilterDto): Observable<TableToponymDto[]> {
     const headers = { 'Content-Type': 'application/json' };
-    return this.http.post<ToponymDto[]>(`${this.API_BASE_URL}/toponyms`, filters, { headers })
+    return this.http.post<TableToponymDto[]>(`${this.API_BASE_URL}/toponyms`, filters, { headers })
       .pipe(
         catchError(error => {
           console.error('Error fetching toponyms:', error);
@@ -24,13 +24,24 @@ export class ToponymsService {
       );
   }
 
-  import(file: File): Observable<any> {
+  getToponymById(id: string): Observable<ToponymDto> {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post<ToponymDto>(`${this.API_BASE_URL}/toponyms_by_id`, { id }, { headers })
+      .pipe(
+        catchError(error => {
+          console.error(`Error fetching toponym with ID ${id}:`, error);
+          return throwError(error);
+        })
+      );
+  }
+
+  import(file: File): Observable<{ message: string; addedRecords: number }> {
     const formData = new FormData();
     formData.append('file', file);
-
+  
     const uploadUrl = `${this.API_BASE_URL}/import`;
-
-    return this.http.post(uploadUrl, formData)
+  
+    return this.http.post<{ message: string; addedRecords: number }>(uploadUrl, formData)
       .pipe(
         catchError(error => {
           console.error('Error importing JSON:', error);
@@ -38,6 +49,7 @@ export class ToponymsService {
         })
       );
   }
+  
 
   export(): Observable<Blob> {
     const downloadUrl = `${this.API_BASE_URL}/export`;

@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, inject} from '@angular/core';
 import { TuiFileLike, TuiFiles } from "@taiga-ui/kit";
 import {catchError, debounceTime, finalize, map, Observable, of, Subject, switchMap, takeUntil} from "rxjs";
 import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -6,6 +6,8 @@ import { AsyncPipe, NgIf } from "@angular/common";
 import { ToponymsService } from "../../../services/toponyms.service";
 import { TuiAppearance, TuiButton } from "@taiga-ui/core";
 import {FilterDto} from "../../../dtos/dtos";
+import { TuiAlertService } from '@taiga-ui/core';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-import-export',
@@ -15,6 +17,7 @@ import {FilterDto} from "../../../dtos/dtos";
   styleUrl: './import-export.component.sass'
 })
 export class ImportExportComponent implements OnDestroy {
+  private readonly alerts = inject(TuiAlertService);
 
   private destroy$ = new Subject<void>();
 
@@ -39,25 +42,37 @@ export class ImportExportComponent implements OnDestroy {
 
   protected processFile(file: TuiFileLike | null): Observable<TuiFileLike | null> {
     this.failedFiles$.next(null);
-
+  
     if (this.control.invalid || !file) {
       return of(null);
     }
-
+  
     this.loadingFiles$.next(file);
+  
     return this.toponymsService.import(file as File).pipe(
-      takeUntil(this.destroy$),
+      tap(response => {
+        this.alerts
+          .open(
+            `<strong>Добавлено записей: ${response.addedRecords}</strong>`,
+          )
+          .subscribe();
+      }),
       map(() => {
         return file;
       }),
-      catchError((error) => {
+      catchError(error => {
         console.error('File upload failed:', error);
+        this.alerts
+        .open(
+          `<strong>Ошибка добавления записей</strong>`
+        )
+        .subscribe();
         this.failedFiles$.next(file);
         return of(null);
       }),
       finalize(() => {
         this.loadingFiles$.next(null);
-
+  
         const filterDto: FilterDto = {
           type: null,
           style: null,
@@ -71,7 +86,6 @@ export class ImportExportComponent implements OnDestroy {
           address: null,
           name: null,
         };
-
         this.toponymsService.filtersChanged$.next(filterDto);
       })
     );

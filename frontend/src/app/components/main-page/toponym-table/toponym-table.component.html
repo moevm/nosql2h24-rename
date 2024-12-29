@@ -1,35 +1,32 @@
 <div class="d-flex flex-column align-items-center">
-<table tuiTable class="table" [columns]="columns">
-  <thead>
-  <tr tuiThGroup>
-    <th tuiTh>{{columns[0]}}</th>
-    <th tuiTh>{{columns[1]}}</th>
-    <th tuiTh>{{columns[2]}}</th>
-    <th tuiTh>{{columns[3]}}</th>
-    <th tuiTh>{{columns[4]}}</th>
-    <th tuiTh>{{columns[5]}}</th>
-    <th tuiTh>{{columns[6]}}</th>
-  </tr>
-  </thead>
-  <tbody tuiTbody [data]="paginatedData">
-  <tr *ngFor="let item of paginatedData" tuiTr>
-    <td *tuiCell="columns[0]" tuiTd>{{ item.name }}</td>
-    <td *tuiCell="columns[1]" tuiTd>{{ item.renameYears }}</td>
-    <td *tuiCell="columns[2]" tuiTd>{{ item.address }}</td>
-    <td *tuiCell="columns[3]" tuiTd>
-      <img [src]="item.photoUrl | safeUrl" alt="Photo" width="100" />
-    </td>
-    <td *tuiCell="columns[4]" tuiTd>{{ item.type }}</td>
-    <td *tuiCell="columns[5]" tuiTd>{{ item.style }}</td>
-    <td *tuiCell="columns[6]" tuiTd>{{ item.architect }}</td>
-  </tr>
-  </tbody>
-</table>
-<tui-pagination
-  [length]="totalPages"
-  [(index)]="currentPage"
-  [size]="'l'"
-  (indexChange)="onPageChange($event)"
-></tui-pagination>
+  <table tuiTable class="table table-hover" [columns]="columns">
+    <thead>
+      <tr tuiThGroup>
+        <th tuiTh>{{columns[0]}}</th>
+        <th tuiTh>{{columns[1]}}</th>
+        <th tuiTh>{{columns[2]}}</th>
+        <th tuiTh>{{columns[3]}}</th>
+        <th tuiTh>{{columns[4]}}</th>
+        <th tuiTh>{{columns[5]}}</th>
+        <th tuiTh>{{columns[6]}}</th>
+        <th tuiTh>{{columns[7]}}</th>
+      </tr>
+    </thead>
+    <tbody tuiTbody [data]="paginatedData">
+      <tr *ngFor="let item of paginatedData" tuiTr class="clickable-row" (click)="onRowClick(item.id)">
+        <td *tuiCell="columns[0]" tuiTd>{{ item.name }}</td>
+        <td *tuiCell="columns[1]" tuiTd>{{ item.renameYears }}</td>
+        <td *tuiCell="columns[2]" tuiTd>{{ item.address }}</td>
+        <td *tuiCell="columns[3]" tuiTd>
+          <img [src]="item.photoUrl | safeUrl" alt="Photo" width="100" />
+        </td>
+        <td *tuiCell="columns[4]" tuiTd>{{ item.type }}</td>
+        <td *tuiCell="columns[5]" tuiTd>{{ item.style }}</td>
+        <td *tuiCell="columns[6]" tuiTd>{{ item.architect }}</td>
+        <td *tuiCell="columns[7]" tuiTd>{{ item.briefDescription }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <tui-pagination [length]="totalPages" [(index)]="currentPage" [size]="'l'"
+    (indexChange)="onPageChange($event)"></tui-pagination>
 </div>
-

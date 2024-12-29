@@ -1,8 +1,7 @@
 import {Component} from "@angular/core";
 import {TuiTabs, TuiTabsHorizontal} from "@taiga-ui/kit";
 import {TuiRoot} from "@taiga-ui/core";
-import {MainPageComponent} from "./components/main-page/main-page.component";
-import {RouterOutlet} from "@angular/router";
+import {RouterModule, RouterOutlet} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -10,9 +9,9 @@ import {RouterOutlet} from "@angular/router";
   imports: [
     TuiTabsHorizontal,
     TuiRoot,
-    MainPageComponent,
     TuiTabs,
-    RouterOutlet
+    RouterOutlet,
+    RouterModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.sass'
