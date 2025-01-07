@@ -2,8 +2,8 @@
     "toponyms": [
         {
             "Address": "Невский проспект, 1",
-            "ConstructionDateFrom": 1703,
-            "ConstructionDateTo": 1706,
+            "ConstructionDateFrom": 1768,
+            "ConstructionDateTo": 1768,
             "BriefDescription": "Историческое здание в Санкт-Петербурге.",
             "Point": {
                 "latitude": 59.935,
@@ -20,7 +20,7 @@
             "nameRecords": [
                 {
                     "Name": "Зимний дворец",
-                    "EffectiveDateFrom": 1754
+                    "EffectiveDateFrom": 1768
                 },
                 {
                     "Name": "Государственный Эрмитаж",
@@ -31,7 +31,7 @@
         {
             "Address": "Дворцовая площадь, 2",
             "ConstructionDateFrom": 1837,
-            "ConstructionDateTo": 1843,
+            "ConstructionDateTo": 1837,
             "BriefDescription": "Известная площадь с Александровской колонной.",
             "Point": {
                 "latitude": 59.939,
@@ -54,7 +54,7 @@
         {
  
             "Address": "Река Мойка, 12",
-            "ConstructionDateFrom": 1765,
+            "ConstructionDateFrom": 1771,
             "ConstructionDateTo": 1771,
             "BriefDescription": "Исторический особняк на реке Мойке.",
             "Point": {
@@ -72,14 +72,14 @@
             "nameRecords": [
                 {
                     "Name": "Дворец Юсуповых",
-                    "EffectiveDateFrom": 1830
+                    "EffectiveDateFrom": 1771
                 }
             ]
         },
         {
             "Address": "Сенатская площадь, 3",
             "ConstructionDateFrom": 1828,
-            "ConstructionDateTo": 1834,
+            "ConstructionDateTo": 1828,
             "BriefDescription": "Монументальное здание в Санкт-Петербурге.",
             "Point": {
                 "latitude": 59.934,
