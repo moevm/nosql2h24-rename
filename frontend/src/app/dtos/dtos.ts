@@ -1,6 +1,6 @@
 // TODO: РАЗБИТЬ ПО ФАЙЛАМ
 
-export interface ToponymDto {
+export interface TableToponymDto {
   name: string;
   renameYears: number[];
   address: string;
@@ -8,6 +8,26 @@ export interface ToponymDto {
   type: string;
   style: string;
   architect: string;
+  id: string;
+  briefDescription: string;
+}
+
+export interface RenameRecord {
+  name: string;
+  year: number;
+}
+
+export interface ToponymDto {
+  id: string;
+  name: string;
+  briefDescription: string;
+  renameYears: number[];
+  renames: RenameRecord[];
+  address: string;
+  photoUrls: string[];
+  type: string[];
+  style: string[];
+  architect: string[];
 }
 
 export interface FilterDto {

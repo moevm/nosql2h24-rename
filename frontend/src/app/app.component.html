@@ -1,9 +1,7 @@
 <tui-root tuiTheme="dark">
   <div class="container-fluid">
     <tui-tabs [(activeItemIndex)]="activeTab">
-      <button tuiTab>Таблица</button>
-      <button tuiTab>Карта</button>
-      <button tuiTab>О проекте</button>
+      <button [routerLink]="['/']" tuiTab>Таблица</button>
     </tui-tabs>
     <router-outlet></router-outlet>
   </div>

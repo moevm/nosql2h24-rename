@@ -1,0 +1,63 @@
+<div class="container my-4" *ngIf="toponymDto">
+    <div class="row">
+        <div class="col-12 col-md-8">
+            <h1 class="mb-4">{{ toponymDto.name }}</h1>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td><strong>Год постройки</strong></td>
+                        <td>{{ toponymDto.renameYears && toponymDto.renameYears.length
+                            ? toponymDto.renameYears[toponymDto.renameYears.length - 1]
+                            : 'Неизвестен' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Адрес</strong></td>
+                        <td>{{ toponymDto.address }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Стиль</strong></td>
+                        <td>{{ toponymDto.style }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Архитекторы</strong></td>
+                        <td>{{ toponymDto.architect }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Тип</strong></td>
+                        <td>{{ toponymDto.type }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <h5 class="mb-3">Краткое описание</h5>
+            <p>{{ toponymDto.briefDescription }}</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <h5 class="mb-3">Фотографии</h5>
+            <div class="d-flex flex-wrap gap-3">
+                <div *ngFor="let photoUrl of toponymDto.photoUrls; let i = index"
+                    style="width: 100px; height: 75px; cursor: pointer" (click)="openPhotoDialog(i)">
+                    <img [src]="photoUrl" style="width: 100%; height: 100%; object-fit: cover" alt="Mini photo" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <h5 class="mb-3">История переименования</h5>
+            <ul>
+                <li *ngFor="let renameItem of toponymDto.renames">
+                    {{ renameItem.name }} {{renameItem.year}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
