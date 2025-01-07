@@ -67,4 +67,10 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+  get totalToponymsCount(): number {
+    return this.filteredData.length;
+  }
+
 }
+

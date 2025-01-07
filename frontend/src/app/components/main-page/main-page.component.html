@@ -4,6 +4,12 @@
     <app-import-export></app-import-export>
   </div>
   <div class="col-10">
+    <!-- Отображение количества найденных топонимов -->
+    <div class="mb-3">
+      <span class="fw-bold">Найдено топонимов:</span> {{ totalToponymsCount }}
+    </div>
+
+    <!-- Таблица топонимов -->
     <app-toponym-table
       [data]="filteredData"
       [columns]="columns"
